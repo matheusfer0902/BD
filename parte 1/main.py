@@ -24,7 +24,7 @@ def searchMenu():
             "2 - Pesquisar por ID\n"
             "3 - Voltar\n"
         )          
-        op = input()
+        op = int(input())
         return op
 
 op = int(mainMenu())
