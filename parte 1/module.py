@@ -1,13 +1,28 @@
+import connection
+
 class Book:
-    def __init__(self, name, price, author, publisher, id):
+    def __init__(self, name, author, publisher, price, qntdd):
         self.name = name
-        self.price = price
         self.author = author
         self.publisher = publisher
-        self.id = id
-        self.books = []
+        self.price = price
+        self.qntdd = qntdd
 
-    def insetBook(self, book):
+    def printBook(self):
+        print(f"\nName: {self.name}\n"
+                f"Author: {self.author}\n"
+                f"Publisher: {self.publisher}\n"
+                f"Price: {self.price}\n"
+                f"Qtdd: {self.qntdd}\n")
+
+    def insertBook(self):
+        comando = f'INSERT INTO estoque (name, author, publisher, price, quantidade) VALUES ("{self.name}", "{self.author}", "{self.publisher}", {self.price}, {self.qntdd})'
+
+        connection.cursor.execute(comando)
+
+        connection.connection.commit() # edita o banco de dados
+
+        print("Livro inserido com sucesso!!\n")
         return
 
     def showBooks(self):

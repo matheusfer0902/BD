@@ -1,3 +1,7 @@
+import connection
+import module
+
+
 def mainMenu() :
     while 1:
         print(
@@ -9,7 +13,7 @@ def mainMenu() :
             "5 - Remover livro\n"
             "6 - Sair\n"
         )
-        op = input()
+        op = input()    
         return op
     
 def searchMenu():
@@ -19,19 +23,22 @@ def searchMenu():
             "1 - Pesquisar por nome\n"
             "2 - Pesquisar por ID\n"
             "3 - Voltar\n"
-        )
+        )          
         op = input()
         return op
 
-op = mainMenu()
+op = int(mainMenu())
 
 match op:
     case 1:
         name = input("Digite o nome do livro: ")
-        price = input("Digite o preço do livro: ")
         author = input("Digite o nome do autor: ")
         publisher = input("Digite o nome da editora: ")
-        id = input("Digite o ID do livro: ")
+        price = input("Digite o preço do livro: ")
+        qntdd = input("Digite a quantidade de livros: ")
+        book = module.Book(name, author, publisher, price, qntdd)
+        book.printBook()
+        book.insertBook()
     case 2:
         updatePrice()
     case 3:
@@ -46,3 +53,6 @@ match op:
         sair()
     case _:
         print("Opção inválida")
+
+connection.cursor.close()
+connection.connection.close()
