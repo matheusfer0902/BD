@@ -41,3 +41,8 @@ class Client(User):
     
     def showPurchases(self):
         return
+    
+class bookSeller(User):
+    def __init__(self):
+        return
+    
