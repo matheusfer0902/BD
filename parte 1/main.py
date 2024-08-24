@@ -62,7 +62,7 @@ match op:
         print("Qual o novo preço?")
         newPrice = float(input())
 
-        comando = f'UPDATE estoque SET price = {newPrice} WHERE id_book = {op}'
+        comando = f'UPDATE estoque SET price = {newPrice: .2f} WHERE id_book = {op}'
 
         connection.cursor.execute(comando)
 
@@ -121,7 +121,13 @@ match op:
             book.showData(id)
         # showData()
     case 5:
-        removeBook()
+        id = input("Digite o id para remover: ")
+        
+        comando = f'DELETE FROM estoque WHERE id_book = {id}'
+
+        connection.cursor.execute(comando)
+
+        connection.connection.commit()
     case 6:
         sair()
     case _:
