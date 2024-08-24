@@ -25,7 +25,13 @@ class Book:
         print("Livro inserido com sucesso!!\n")
         return
 
-    def showBooks(self):
+    def showData(self, id):
+        print(f"\n(ID): {id}\n"
+                f"Name: {self.name}\n"
+                f"Author: {self.author}\n"
+                f"Publisher: {self.publisher}\n"
+                f"Price: {self.price}\n"
+                f"Qtdd: {self.qntdd}\n")
         return
 
     def updatePrice(self):

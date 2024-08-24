@@ -13,9 +13,9 @@ def mainMenu() :
             "5 - Remover livro\n"
             "6 - Sair\n"
         )
-        op = input()    
+        op = input()
         return op
-    
+
 def searchMenu():
     while 1:
         print(
@@ -23,7 +23,7 @@ def searchMenu():
             "1 - Pesquisar por nome\n"
             "2 - Pesquisar por ID\n"
             "3 - Voltar\n"
-        )          
+        )
         op = int(input())
         return op
 
@@ -46,7 +46,23 @@ match op:
         if idOrName == 3:
             mainMenu()
     case 4:
-        showData()
+
+        comando = f'SELECT * FROM estoque'
+
+        connection.cursor.execute(comando)
+
+        resultado = connection.cursor.fetchall() # ler o banco de dados
+
+        for x in range(len(resultado)):
+            id = resultado[x][0]
+            name = resultado[x][1]
+            author = resultado[x][2]
+            publisher = resultado[x][3]
+            price = float(resultado[x][4])
+            qntdd = int(resultado[x][5])
+            book = module.Book(name, author, publisher, price, qntdd)
+            book.showData(id)
+        # showData()
     case 5:
         removeBook()
     case 6:
