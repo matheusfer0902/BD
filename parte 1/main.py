@@ -40,7 +40,35 @@ match op:
         book.printBook()
         book.insertBook()
     case 2:
-        updatePrice()
+
+        comando = f'SELECT * FROM estoque'
+
+        connection.cursor.execute(comando)
+
+        resultado = connection.cursor.fetchall() # ler o banco de dados
+
+        for x in range(len(resultado)):
+            id = resultado[x][0]
+            name = resultado[x][1]
+            author = resultado[x][2]
+            publisher = resultado[x][3]
+            price = float(resultado[x][4])
+            qntdd = int(resultado[x][5])
+            book = module.Book(name, author, publisher, price, qntdd)
+            book.showData(id)
+
+        print("Selecione o ID que você quer alterar")
+        op = int(input())
+
+        print("Qual o novo preço?")
+        newPrice = float(input())
+
+        comando = f'UPDATE estoque SET price = {newPrice} WHERE idlivro = {op}'
+
+        connection.cursor.execute(comando)
+
+        connection.connection.commit()
+
     case 3:
         idOrName = searchMenu()
         if idOrName == 3:
