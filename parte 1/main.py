@@ -42,9 +42,40 @@ match op:
     case 2:
         updatePrice()
     case 3:
-        idOrName = searchMenu()
-        if idOrName == 3:
-            mainMenu()
+        idOrName = int(searchMenu())
+        match idOrName:
+            case 1:
+                name = input("Digite o nome para pesquisa: ")
+                comando = f'SELECT * FROM estoque WHERE name LIKE "%{name}%"'
+                connection.cursor.execute(comando)
+                resultado = connection.cursor.fetchall() # ler o banco de dados
+                for x in range(len(resultado)):
+                    id = resultado[x][0]
+                    name = resultado[x][1]
+                    author = resultado[x][2]
+                    publisher = resultado[x][3]
+                    price = float(resultado[x][4])
+                    qntdd = int(resultado[x][5])
+                    book = module.Book(name, author, publisher, price, qntdd)
+                    book.showData(id)
+            case 2:
+                id = input("Digite o id para pesquisa: ")
+                comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
+                connection.cursor.execute(comando)
+                resultado = connection.cursor.fetchall() # ler o banco de dados
+                for x in range(len(resultado)):
+                    id = resultado[x][0]
+                    name = resultado[x][1]
+                    author = resultado[x][2]
+                    publisher = resultado[x][3]
+                    price = float(resultado[x][4])
+                    qntdd = int(resultado[x][5])
+                    book = module.Book(name, author, publisher, price, qntdd)
+                    book.showData(id)
+            case 3:
+                mainMenu()
+            case _:
+                print("Opção inválida")   
     case 4:
 
         comando = f'SELECT * FROM estoque'
