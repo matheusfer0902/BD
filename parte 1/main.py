@@ -39,12 +39,36 @@ def callShowData(resultado):
                 book = module.Book(name, author, publisher, price, qntdd)
                 book.showData(id)
 
+def get_string_input(prompt):
+    while True:
+            value = input(prompt)
+            if value.isdigit():
+                print("Entrada inválida. Por favor, digite um texto.")
+            else:
+                return value
+            
+def get_float_input(prompt):
+    while True:
+            try:
+                value = float(input(prompt))
+                return value
+            except ValueError:
+                print("Entrada inválida. Por favor, digite um número válido.")
+
+def get_int_input(prompt):
+        while True:
+            try:
+                value = int(input(prompt))
+                return value
+            except ValueError:
+                print("Entrada inválida. Por favor, digite um número inteiro válido.")
+
 def createBook():
     name = input("Digite o nome do livro: ")
-    author = input("Digite o nome do autor: ")
-    publisher = input("Digite o nome da editora: ")
-    price = input("Digite o preço do livro: ")
-    qntdd = input("Digite a quantidade de livros: ")
+    author = get_string_input("Digite o nome do autor: ")
+    publisher = get_string_input("Digite o nome da editora: ")
+    price = get_float_input("Digite o preço do livro: ")
+    qntdd = get_int_input("Digite a quantidade de livros: ")
     book = module.Book(name, author, publisher, price, qntdd)
     return book
  
@@ -126,6 +150,7 @@ while(on):
             
             input("\nAperte ENTER para continuar...")
         case 5: #REMOVE/REMOVER
+            showAll()
             id = input("Digite o id para remover: ")
 
             resultado = getBookFromID(id, 1)
