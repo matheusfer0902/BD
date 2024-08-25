@@ -28,148 +28,117 @@ def searchMenu():
         op = int(input())
         return op
 
+def callShowData(resultado):
+    for x in range(len(resultado)):
+                id = resultado[x][0]
+                name = resultado[x][1]
+                author = resultado[x][2]
+                publisher = resultado[x][3]
+                price = float(resultado[x][4])
+                qntdd = int(resultado[x][5])
+                book = module.Book(name, author, publisher, price, qntdd)
+                book.showData(id)
+
+def createBook():
+    name = input("Digite o nome do livro: ")
+    author = input("Digite o nome do autor: ")
+    publisher = input("Digite o nome da editora: ")
+    price = input("Digite o preço do livro: ")
+    qntdd = input("Digite a quantidade de livros: ")
+    book = module.Book(name, author, publisher, price, qntdd)
+    return book
+ 
+def showAll():
+    comando = f'SELECT * FROM estoque'
+    resultado = module.readDB(comando)
+    callShowData(resultado)
+
+#type = 0 to return book, type = 1 to return result
+def getBookFromID(id, type):
+    comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
+    resultado = module.readDB(comando)
+    if type == 0:
+        id = resultado[0][0]
+        name = resultado[0][1]
+        author = resultado[0][2]
+        publisher = resultado[0][3]
+        price = float(resultado[0][4])
+        qntdd = int(resultado[0][5])
+        book = module.Book(name, author, publisher, price, qntdd)
+        return book
+    elif type == 1:
+        return resultado
+
 on = True
+bookshelf = module.Book(0,0,0,0,0) #generic object for calling methods
 while(on):
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system('cls')
     op = int(mainMenu())
 
     match op:
-        case 1: #INSERE
-            os.system('cls' if os.name == 'nt' else 'clear')
-            name = input("Digite o nome do livro: ")
-            author = input("Digite o nome do autor: ")
-            publisher = input("Digite o nome da editora: ")
-            price = input("Digite o preço do livro: ")
-            qntdd = input("Digite a quantidade de livros: ")
-            book = module.Book(name, author, publisher, price, qntdd)
+        case 1: #CREATE/INSERIR
+            os.system('cls')
+
+            book = createBook()
             book.printBook()
             book.insertBook()
+
             input("\nAperte ENTER para continuar...")
-        case 2: #ALTERAR
-            os.system('cls' if os.name == 'nt' else 'clear')
-            comando = f'SELECT * FROM estoque'
+        case 2: #UPDATE/ALTERAR
+            os.system('cls')
 
-            connection.cursor.execute(comando)
-
-            resultado = connection.cursor.fetchall() # ler o banco de dados
-
-            for x in range(len(resultado)):
-                id = resultado[x][0]
-                name = resultado[x][1]
-                author = resultado[x][2]
-                publisher = resultado[x][3]
-                price = float(resultado[x][4])
-                qntdd = int(resultado[x][5])
-                book = module.Book(name, author, publisher, price, qntdd)
-                book.showData(id)
+            showAll()
 
             print("Selecione o ID que você quer alterar")
-            op = int(input())
+            id = int(input())
+            book = getBookFromID(id, 0)
 
-            print("Qual o novo preço?")
-            newPrice = float(input())
+            book.printBook()
+            book.updatePrice(id)
 
-            comando = f'UPDATE estoque SET price = {newPrice} WHERE id_book = {op}'
-
-            connection.cursor.execute(comando)
-
-            connection.connection.commit()
             input("\nAperte ENTER para continuar...")
-        case 3: #PESQUISA
-            os.system('cls' if os.name == 'nt' else 'clear')
+        case 3: #SEARCH/PESQUISAR
+            os.system('cls')
             idOrName = int(searchMenu())
             match idOrName:
-                case 1: #POR NOME
-                    os.system('cls' if os.name == 'nt' else 'clear')
-                    name = input("Digite o nome para pesquisa: ")
-                    comando = f'SELECT * FROM estoque WHERE name LIKE "%{name}%"'
-                    connection.cursor.execute(comando)
-                    resultado = connection.cursor.fetchall() # ler o banco de dados
-                    for x in range(len(resultado)):
-                        id = resultado[x][0]
-                        name = resultado[x][1]
-                        author = resultado[x][2]
-                        publisher = resultado[x][3]
-                        price = float(resultado[x][4])
-                        qntdd = int(resultado[x][5])
-                        book = module.Book(name, author, publisher, price, qntdd)
-                        book.showData(id)
+                case 1: #NAME
+                    os.system('cls')
+
+                    resultado = bookshelf.searchByName()
+                    callShowData(resultado)
+
                     input("\nAperte ENTER para continuar...")
-                case 2: #POR ID
-                    os.system('cls' if os.name == 'nt' else 'clear')
-                    id = input("Digite o id para pesquisa: ")
-                    comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
-                    connection.cursor.execute(comando)
-                    resultado = connection.cursor.fetchall() # ler o banco de dados
-                    for x in range(len(resultado)):
-                        id = resultado[x][0]
-                        name = resultado[x][1]
-                        author = resultado[x][2]
-                        publisher = resultado[x][3]
-                        price = float(resultado[x][4])
-                        qntdd = int(resultado[x][5])
-                        book = module.Book(name, author, publisher, price, qntdd)
-                        book.showData(id)
+                case 2: #ID
+                    os.system('cls')
+
+                    resultado = bookshelf.searchByID()
+                    callShowData(resultado)
+
                     input("\nAperte ENTER para continuar...")
-                case 3: #VOLTAR
-                    mainMenu()
+                case 3: #BACK TO MENU
+                    input("\nAperte ENTER para voltar ao menu...")
                 case _:
                     print("Opção inválida")   
-        case 4: #LISTAR TODOS
-            os.system('cls' if os.name == 'nt' else 'clear')
-            comando = f'SELECT * FROM estoque'
+        case 4: #SHOW ALL/LISTAR TODOS
+            os.system('cls')
 
-            connection.cursor.execute(comando)
-
-            resultado = connection.cursor.fetchall() # ler o banco de dados
-
-            for x in range(len(resultado)):
-                id = resultado[x][0]
-                name = resultado[x][1]
-                author = resultado[x][2]
-                publisher = resultado[x][3]
-                price = float(resultado[x][4])
-                qntdd = int(resultado[x][5])
-                book = module.Book(name, author, publisher, price, qntdd)
-                book.showData(id)
+            showAll()
+            
             input("\nAperte ENTER para continuar...")
-        case 5:
+        case 5: #REMOVE/REMOVER
             id = input("Digite o id para remover: ")
 
-            comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
-            connection.cursor.execute(comando)
-            resultado = connection.cursor.fetchall()
+            resultado = getBookFromID(id, 1)
+            callShowData(resultado)
 
-            for x in range(len(resultado)):
-                id = resultado[x][0]
-                name = resultado[x][1]
-                author = resultado[x][2]
-                publisher = resultado[x][3]
-                price = float(resultado[x][4])
-                qntdd = int(resultado[x][5])
-                book = module.Book(name, author, publisher, price, qntdd)
-                book.showData(id)
-        
-            quantidade = int(input("Qual a quantidade a ser removida? "))
+            qntdd = int(resultado[0][5])
+            bookshelf.removeBook(qntdd, id)
 
-            if(qntdd - quantidade <= 0):
-                comando = f'DELETE FROM estoque WHERE id_book = {id}'
-
-                connection.cursor.execute(comando)
-
-                connection.connection.commit()
-
-            else:
-                comando = f'UPDATE estoque SET quantidade = {qntdd - quantidade} WHERE id_book = {id}'
-
-                connection.cursor.execute(comando)
-
-                connection.connection.commit()
-
-        case 6:
+            input("\nAperte ENTER para continuar...")
+        case 6: #EXIT/SAIR
             on = False
         case _:
-            os.system('cls' if os.name == 'nt' else 'clear')
+            os.system('cls')
             print("Opção inválida")
         
     
