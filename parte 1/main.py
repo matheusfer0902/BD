@@ -196,7 +196,23 @@ while(on):
 
             id = resultado[0][0]
             qntdd = int(resultado[0][5])
-            bookshelf.removeBook(qntdd, id)
+
+            quantidade = getIntInput("Qual a quantidade a ser removida? ")
+            if(qntdd - quantidade <= 0):
+                print("ATENÇÃO: Essa ação irá EXCLUIR o livro do estoque\n"
+                        "Essa ação não poderá ser desfeita!\n")
+                while True:
+                    op = getIntInput("Deseja continuar?[0 - não ou 1 - sim] ")
+                    if op == 1:
+                        bookshelf.removeBook(qntdd, quantidade, id)
+                        break
+                    elif op == 0:
+                        break
+                    elif op != 0 & op != 1:
+                        print("Opção Inválida, tente novamente.")
+
+            else:
+                bookshelf.removeBook(qntdd, quantidade, id)
 
             input("\nAperte ENTER para continuar...")
         case 6: #EXIT/SAIR

@@ -78,9 +78,9 @@ class Book:
         return
 
 
-    def removeBook(self, qntdd, id):
-        quantidade = int(input("Qual a quantidade a ser removida? "))
-
+    def removeBook(self, qntdd, quantidade, id):
+        
+        
         if(qntdd - quantidade <= 0):
             comando = f'DELETE FROM estoque WHERE id_book = {id}'
             commitDB(comando)
@@ -88,8 +88,9 @@ class Book:
         else:
             comando = f'UPDATE estoque SET quantidade = {qntdd - quantidade} WHERE id_book = {id}'
             commitDB(comando)
-
         print("Remoção feita com sucesso!!")
+
+
         return
     
     def searchByName(self, name):
