@@ -135,12 +135,37 @@ while(on):
             input("\nAperte ENTER para continuar...")
         case 5:
             id = input("Digite o id para remover: ")
-        
-            comando = f'DELETE FROM estoque WHERE id_book = {id}'
 
+            comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
             connection.cursor.execute(comando)
+            resultado = connection.cursor.fetchall()
 
-            connection.connection.commit()
+            for x in range(len(resultado)):
+                id = resultado[x][0]
+                name = resultado[x][1]
+                author = resultado[x][2]
+                publisher = resultado[x][3]
+                price = float(resultado[x][4])
+                qntdd = int(resultado[x][5])
+                book = module.Book(name, author, publisher, price, qntdd)
+                book.showData(id)
+        
+            quantidade = int(input("Qual a quantidade a ser removida? "))
+
+            if(qntdd - quantidade <= 0):
+                comando = f'DELETE FROM estoque WHERE id_book = {id}'
+
+                connection.cursor.execute(comando)
+
+                connection.connection.commit()
+
+            else:
+                comando = f'UPDATE estoque SET quantidade = {qntdd - quantidade} WHERE id_book = {id}'
+
+                connection.cursor.execute(comando)
+
+                connection.connection.commit()
+
         case 6:
             on = False
         case _:
