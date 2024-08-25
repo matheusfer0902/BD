@@ -53,6 +53,7 @@ while(on):
 
             resultado = connection.cursor.fetchall() # ler o banco de dados
 
+<<<<<<< HEAD
             for x in range(len(resultado)):
                 id = resultado[x][0]
                 name = resultado[x][1]
@@ -62,6 +63,9 @@ while(on):
                 qntdd = int(resultado[x][5])
                 book = module.Book(name, author, publisher, price, qntdd)
                 book.showData(id)
+=======
+        comando = f'UPDATE estoque SET price = {newPrice: .2f} WHERE id_book = {op}'
+>>>>>>> 674119af0461cafac0989734097c46b25284248a
 
             print("Selecione o ID que você quer alterar")
             op = int(input())
@@ -119,7 +123,32 @@ while(on):
             os.system('cls' if os.name == 'nt' else 'clear')
             comando = f'SELECT * FROM estoque'
 
+<<<<<<< HEAD
             connection.cursor.execute(comando)
+=======
+        for x in range(len(resultado)):
+            id = resultado[x][0]
+            name = resultado[x][1]
+            author = resultado[x][2]
+            publisher = resultado[x][3]
+            price = float(resultado[x][4])
+            qntdd = int(resultado[x][5])
+            book = module.Book(name, author, publisher, price, qntdd)
+            book.showData(id)
+        # showData()
+    case 5:
+        id = input("Digite o id para remover: ")
+        
+        comando = f'DELETE FROM estoque WHERE id_book = {id}'
+
+        connection.cursor.execute(comando)
+
+        connection.connection.commit()
+    case 6:
+        sair()
+    case _:
+        print("Opção inválida")
+>>>>>>> 674119af0461cafac0989734097c46b25284248a
 
             resultado = connection.cursor.fetchall() # ler o banco de dados
 
