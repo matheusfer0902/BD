@@ -5,27 +5,21 @@ import os
 
 def mainMenu() :
     while 1:
-        print(
-            "Selecione sua opção\n"
+        op = getIntInput("Selecione sua opção\n"
             "1 - Inserir novo livro\n"
-            "2 - Alterar preço\n"
+            "2 - Editar dados\n"
             "3 - Pesquisar livro\n"
             "4 - Listar livros\n"
             "5 - Remover livro\n"
-            "6 - Sair\n"
-        )
-        op = input()
+            "6 - Sair\n")
         return op
 
 def searchMenu():
     while 1:
-        print(
-            "Selecione a opção que você deseja pesquisar:\n"
+        op = getIntInput("Selecione a opção que você deseja pesquisar:\n"
             "1 - Pesquisar por nome\n"
             "2 - Pesquisar por ID\n"
-            "3 - Voltar\n"
-        )
-        op = int(input())
+            "3 - Voltar\n")
         return op
 
 def callShowData(resultado):
@@ -39,15 +33,17 @@ def callShowData(resultado):
                 book = module.Book(name, author, publisher, price, qntdd)
                 book.showData(id)
 
-def get_string_input(prompt):
+def getStringInput(prompt):
     while True:
             value = input(prompt)
             if value.isdigit():
                 print("Entrada inválida. Por favor, digite um texto.")
+            elif len(value) > 45:
+                print("Entrada inválida. O texto deve ter no máximo 45 caracteres.")
             else:
                 return value
             
-def get_float_input(prompt):
+def getFloatInput(prompt):
     while True:
             try:
                 value = float(input(prompt))
@@ -55,7 +51,7 @@ def get_float_input(prompt):
             except ValueError:
                 print("Entrada inválida. Por favor, digite um número válido.")
 
-def get_int_input(prompt):
+def getIntInput(prompt):
         while True:
             try:
                 value = int(input(prompt))
@@ -63,12 +59,20 @@ def get_int_input(prompt):
             except ValueError:
                 print("Entrada inválida. Por favor, digite um número inteiro válido.")
 
+def getStringToName(prompt):
+    while True:
+            value = input(prompt)
+            if len(value) > 45:
+                print("Entrada inválida. O texto deve ter no máximo 45 caracteres..")
+            else:
+                return value
+
 def createBook():
-    name = input("Digite o nome do livro: ")
-    author = get_string_input("Digite o nome do autor: ")
-    publisher = get_string_input("Digite o nome da editora: ")
-    price = get_float_input("Digite o preço do livro: ")
-    qntdd = get_int_input("Digite a quantidade de livros: ")
+    name = getStringToName("Digite o nome do livro: ")
+    author = getStringInput("Digite o nome do autor: ")
+    publisher = getStringInput("Digite o nome da editora: ")
+    price = getFloatInput("Digite o preço do livro: ")
+    qntdd = getIntInput("Digite a quantidade de livros: ")
     book = module.Book(name, author, publisher, price, qntdd)
     return book
  
@@ -76,6 +80,17 @@ def showAll():
     comando = f'SELECT * FROM estoque'
     resultado = module.readDB(comando)
     callShowData(resultado)
+
+def updateMenu():
+     while 1:
+        op = getIntInput("O que você deseja alterar?\n"
+            "1 - Titulo\n"
+            "2 - Autor\n"
+            "3 - Editora\n"
+            "4 - Preço\n"
+            "5 - Quantidade\n"
+            "6 - Voltar\n")
+        return op
 
 #type = 0 to return book, type = 1 to return result
 def getBookFromID(id, type):
@@ -113,29 +128,55 @@ while(on):
 
             showAll()
 
-            print("Selecione o ID que você quer alterar")
-            id = int(input())
+            id = getIntInput("Selecione o ID que você quer alterar: ")
             book = getBookFromID(id, 0)
 
-            book.printBook()
-            book.updatePrice(id)
-
-            input("\nAperte ENTER para continuar...")
+            upOption = updateMenu()
+            match upOption:
+                case 1: #UPDATE NAME
+                    newName = getStringToName("Qual o novo titulo? ")
+                    book.updateName(id, newName)
+                    print("Titulo Atualizado.")
+                    input("\nAperte ENTER para continuar...")
+                case 2: #UPDATE AUTHOR
+                    newAuthor = getStringInput("Qual o novo Autor? ")
+                    book.updateAuthor(id, newAuthor)
+                    print("Autor Atualizado.")
+                    input("\nAperte ENTER para continuar...")
+                case 3: #UPDATE PUBLISHER
+                    newPublisher = getStringInput("Qual a nova editora? ")
+                    book.updatePublisher(id, newPublisher)
+                    print("editora Atualizada.")
+                    input("\nAperte ENTER para continuar...")
+                case 4: #UPDATE PRICE
+                    newPrice = getFloatInput("Qual o novo preço? ")
+                    book.updatePrice(id, newPrice)
+                    print("Preço Atualizado.")
+                    input("\nAperte ENTER para continuar...")
+                case 5: #UPDATE QUANTITY
+                    newQuant = getIntInput("Qual a nova quantidade? ")
+                    book.updateQuantity(id, newQuant)
+                    print("quantidade Atualizada.")
+                    input("\nAperte ENTER para continuar...")
+                case 6: #BACK TO MENU
+                    input("\nAperte ENTER para voltar ao menu...")
+                case _:
+                    print("Opção inválida")
         case 3: #SEARCH/PESQUISAR
             os.system('cls')
             idOrName = int(searchMenu())
             match idOrName:
                 case 1: #NAME
                     os.system('cls')
-
-                    resultado = bookshelf.searchByName()
+                    searchName = getStringInput("Digite o nome para pesquisa: ")
+                    resultado = bookshelf.searchByName(searchName)
                     callShowData(resultado)
 
                     input("\nAperte ENTER para continuar...")
                 case 2: #ID
                     os.system('cls')
-
-                    resultado = bookshelf.searchByID()
+                    searchID = getIntInput("Digite o id para pesquisa: ")
+                    resultado = bookshelf.searchByID(searchID)
                     callShowData(resultado)
 
                     input("\nAperte ENTER para continuar...")

@@ -42,13 +42,32 @@ class Book:
 
 
 
-    def updatePrice(self, id):
-        print("Qual o novo preço?")
-        newPrice = float(input())
+    def updatePrice(self, id, newPrice):
 
         comando = f'UPDATE estoque SET price = {newPrice} WHERE id_book = {id}'
         commitDB(comando)
         return
+    
+    def updateName(self, id, newName):
+        comando = f'UPDATE estoque SET name = "{newName}" WHERE id_book = {id}'
+        commitDB(comando)
+        return
+        
+    def updateAuthor(self, id, newAuthor):
+        comando = f'UPDATE estoque SET author = "{newAuthor}" WHERE id_book = {id}'
+        commitDB(comando)
+        return
+
+    def updatePublisher(self, id, newPublisher):
+        comando = f'UPDATE estoque SET publisher = "{newPublisher}" WHERE id_book = {id}'
+        commitDB(comando)
+        return
+
+    def updateQuantity(self, id, newQuant):
+        comando = f'UPDATE estoque SET quantidade = {newQuant} WHERE id_book = {id}'
+        commitDB(comando)
+        return
+
 
     def removeBook(self, qntdd, id):
         quantidade = int(input("Qual a quantidade a ser removida? "))
@@ -64,14 +83,12 @@ class Book:
         print("Remoção feita com sucesso!!")
         return
     
-    def searchByName(self):
-        name = input("Digite o nome para pesquisa: ")
+    def searchByName(self, name):
         comando = f'SELECT * FROM estoque WHERE name LIKE "%{name}%"'
         resultado = readDB(comando)
         return resultado
     
-    def searchByID(self):
-        id = input("Digite o id para pesquisa: ")
+    def searchByID(self, id):
         comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
         resultado = readDB(comando)
         return resultado
