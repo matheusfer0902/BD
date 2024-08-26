@@ -25,10 +25,19 @@ class Book:
                 f"Qtdd: {self.qntdd}\n")
 
     def insertBook(self):
-        comando = f'INSERT INTO estoque (name, author, publisher, price, quantidade) VALUES ("{self.name}", "{self.author}", "{self.publisher}", {self.price}, {self.qntdd})'
-        commitDB(comando)
+        comando = f'SELECT * FROM estoque WHERE name = "{self.name}" AND author = "{self.author}" AND publisher = "{self.publisher}"'
+        resultado = readDB(comando)
 
-        print("Inserção feita com sucesso!!\n")
+        if resultado == []:
+            comando = f'INSERT INTO estoque (name, author, publisher, price, quantidade) VALUES ("{self.name}", "{self.author}", "{self.publisher}", {self.price}, {self.qntdd})'
+            commitDB(comando)
+            print("Inserção feita com sucesso!!\n")
+
+        else:
+            id = resultado[0][0]
+            qntddID = resultado[0][5]
+            self.updateQuantity(id, self.qntdd+qntddID)
+            print("Livro já estava inserido. Quantidade atualizada!")
         return
 
     def showData(self, id):

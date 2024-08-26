@@ -93,20 +93,18 @@ def updateMenu():
         return op
 
 #type = 0 to return book, type = 1 to return result
-def getBookFromID(id, type):
-    comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
-    resultado = module.readDB(comando)
-    if type == 0:
-        id = resultado[0][0]
-        name = resultado[0][1]
-        author = resultado[0][2]
-        publisher = resultado[0][3]
-        price = float(resultado[0][4])
-        qntdd = int(resultado[0][5])
-        book = module.Book(name, author, publisher, price, qntdd)
-        return book
-    elif type == 1:
-        return resultado
+def getBookFromID():
+
+    while True:        
+        id = getIntInput("Selecione o ID:")
+        comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
+        resultado = module.readDB(comando)
+        if resultado == []:
+            print("ID não encontrado. Tente novamente!\n")
+        else:
+            return resultado
+
+
 
 on = True
 bookshelf = module.Book(0,0,0,0,0) #generic object for calling methods
@@ -128,34 +126,34 @@ while(on):
 
             showAll()
 
-            id = getIntInput("Selecione o ID que você quer alterar: ")
-            book = getBookFromID(id, 0)
+            resultado = getBookFromID()
+            id = resultado[0][0]
 
             upOption = updateMenu()
             match upOption:
                 case 1: #UPDATE NAME
                     newName = getStringToName("Qual o novo titulo? ")
-                    book.updateName(id, newName)
+                    bookshelf.updateName(id, newName)
                     print("Titulo Atualizado.")
                     input("\nAperte ENTER para continuar...")
                 case 2: #UPDATE AUTHOR
                     newAuthor = getStringInput("Qual o novo Autor? ")
-                    book.updateAuthor(id, newAuthor)
+                    bookshelf.updateAuthor(id, newAuthor)
                     print("Autor Atualizado.")
                     input("\nAperte ENTER para continuar...")
                 case 3: #UPDATE PUBLISHER
                     newPublisher = getStringInput("Qual a nova editora? ")
-                    book.updatePublisher(id, newPublisher)
+                    bookshelf.updatePublisher(id, newPublisher)
                     print("editora Atualizada.")
                     input("\nAperte ENTER para continuar...")
                 case 4: #UPDATE PRICE
                     newPrice = getFloatInput("Qual o novo preço? ")
-                    book.updatePrice(id, newPrice)
+                    bookshelf.updatePrice(id, newPrice)
                     print("Preço Atualizado.")
                     input("\nAperte ENTER para continuar...")
                 case 5: #UPDATE QUANTITY
                     newQuant = getIntInput("Qual a nova quantidade? ")
-                    book.updateQuantity(id, newQuant)
+                    bookshelf.updateQuantity(id, newQuant)
                     print("quantidade Atualizada.")
                     input("\nAperte ENTER para continuar...")
                 case 6: #BACK TO MENU
@@ -175,8 +173,8 @@ while(on):
                     input("\nAperte ENTER para continuar...")
                 case 2: #ID
                     os.system('cls')
-                    searchID = getIntInput("Digite o id para pesquisa: ")
-                    resultado = bookshelf.searchByID(searchID)
+
+                    resultado = getBookFromID()
                     callShowData(resultado)
 
                     input("\nAperte ENTER para continuar...")
@@ -192,11 +190,11 @@ while(on):
             input("\nAperte ENTER para continuar...")
         case 5: #REMOVE/REMOVER
             showAll()
-            id = input("Digite o id para remover: ")
-
-            resultado = getBookFromID(id, 1)
+            
+            resultado = getBookFromID()
             callShowData(resultado)
 
+            id = resultado[0][0]
             qntdd = int(resultado[0][5])
             bookshelf.removeBook(qntdd, id)
 
