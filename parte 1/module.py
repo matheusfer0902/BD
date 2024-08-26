@@ -46,23 +46,27 @@ class Book:
             os.system('cls')
             priceInBD = float(resultado[0][4])
             if priceInBD != self.price:
-                print("O livro já está inserido e a quantidade será atualizada\n")
-                priceOp = self.getFloatInputForClass("Porem o preço em estoque está diferente. Escolha como prosseguir\n"
-                    "1 - Continuar com o preço em estoque.\n"
-                    "2 - atualizar estoque com o novo preço.\n"
-                )
-                match priceOp:
-                    case 1:
-                        id = resultado[0][0]
-                        qntddID = resultado[0][5]
-                        self.updateQuantity(id, self.qntdd+qntddID)
-                        print("Quantidade atualizada!")
-                    case 2:
-                        id = resultado[0][0]
-                        qntddID = resultado[0][5]
-                        self.updatePrice(id, self.price)
-                        self.updateQuantity(id, self.qntdd+qntddID)
-                        print("Quantidade e preço atualizados!")
+                print("O livro já está inserido e a quantidade será atualizada\n"
+                        "Porem o preço em estoque está diferente. Escolha como prosseguir\n")
+                while True:
+                    priceOp = self.getFloatInputForClass("1 - Continuar com o preço em estoque.\n"
+                                                        "2 - atualizar estoque com o novo preço.\n")
+                    match priceOp:
+                        case 1:
+                            id = resultado[0][0]
+                            qntddID = resultado[0][5]
+                            self.updateQuantity(id, self.qntdd+qntddID)
+                            print("Quantidade atualizada!")
+                            break
+                        case 2:
+                            id = resultado[0][0]
+                            qntddID = resultado[0][5]
+                            self.updatePrice(id, self.price)
+                            self.updateQuantity(id, self.qntdd+qntddID)
+                            print("Quantidade e preço atualizados!")
+                            break
+                        case _:
+                            print("Opção Inválida, tente novamente.\n")
             else:
                 id = resultado[0][0]
                 qntddID = resultado[0][5]
