@@ -130,12 +130,13 @@ class Book:
         
         
         if(qntdd - quantidade <= 0):
-            comando = f'DELETE FROM estoque WHERE id_book = {id}'
-            commitDB(comando)
+            comando = "DELETE FROM estoque WHERE id_book = %s"
+            commitDB(comando, (id,))
 
         else:
-            comando = f'UPDATE estoque SET quantidade = {qntdd - quantidade} WHERE id_book = {id}'
-            commitDB(comando)
+            comando = "UPDATE estoque SET quantidade = %s WHERE id_book = %s"
+            info = ((qntdd-quantidade), id)
+            commitDB(comando, info)
         print("Remoção feita com sucesso!!")
 
 
