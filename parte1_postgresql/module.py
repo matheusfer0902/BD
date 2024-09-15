@@ -106,23 +106,23 @@ class Book:
         return
     
     def updateName(self, id, newName):
-        comando = f'UPDATE estoque SET name = "{newName}" WHERE id_book = {id}'
-        commitDB(comando)
+        comando = "UPDATE estoque SET name = %s WHERE id_book = %s"
+        commitDB(comando,(newName, id))
         return
         
     def updateAuthor(self, id, newAuthor):
-        comando = f'UPDATE estoque SET author = "{newAuthor}" WHERE id_book = {id}'
-        commitDB(comando)
+        comando = "UPDATE estoque SET author = %s WHERE id_book = %s"
+        commitDB(comando,(newAuthor, id))
         return
 
     def updatePublisher(self, id, newPublisher):
-        comando = f'UPDATE estoque SET publisher = "{newPublisher}" WHERE id_book = {id}'
-        commitDB(comando)
+        comando = "UPDATE estoque SET publisher = %s WHERE id_book = %s"
+        commitDB(comando,(newPublisher, id))
         return
 
     def updateQuantity(self, id, newQuant):
-        comando = f'UPDATE estoque SET quantidade = {newQuant} WHERE id_book = {id}'
-        commitDB(comando)
+        comando = "UPDATE estoque SET quantidade = %s WHERE id_book = %s"
+        commitDB(comando,(newQuant, id))
         return
 
 

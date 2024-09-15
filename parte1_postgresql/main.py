@@ -84,7 +84,7 @@ def updateMenu():
 #type = 0 to return book, type = 1 to return result
 def getBookFromID():
        
-    id = getIntInput("Selecione o ID:")
+    id = getIntInput("Selecione o ID: ")
     comando = "SELECT * from estoque WHERE id_book = %s"
     resultado = module.readDB(comando, (id,))
     if resultado == []:
