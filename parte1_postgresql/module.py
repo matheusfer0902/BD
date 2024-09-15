@@ -24,12 +24,13 @@ class Book:
         self.price = price
         self.qntdd = qntdd
 
-    def printBook(self):
-        print(f"\nName: {self.name}\n"
-                f"Author: {self.author}\n"
-                f"Publisher: {self.publisher}\n"
-                f"Price: {self.price}\n"
-                f"Qtdd: {self.qntdd}\n")
+    def printBook(self, info):
+        print("Nome: ", info[0])
+        print("Autor: ", info[1])
+        print("Editora: ", info[2])
+        print("Preço: ", info[3])
+        print("Qntdd ", info[4], "\n")
+
         
     def getFloatInputForClass(self, prompt):
         while True:
@@ -97,12 +98,11 @@ class Book:
                 f"Qtdd: {self.qntdd}\n")
         return
 
-
-
     def updatePrice(self, id, newPrice):
 
-        comando = f'UPDATE estoque SET price = {newPrice} WHERE id_book = {id}'
-        commitDB(comando)
+        # comando = f'UPDATE estoque SET price = {newPrice} WHERE id_book = {id}'
+        comando = "UPDATE estoque SET price = %s WHERE id_book = %s"
+        commitDB(comando,(newPrice, id))
         return
     
     def updateName(self, id, newName):
@@ -142,9 +142,15 @@ class Book:
         return
     
     def searchByName(self, name):
-        comando = f'SELECT * FROM estoque WHERE name LIKE "%{name}%"'
-        resultado = readDB(comando)
-        return resultado
+        # comando = f'SELECT * FROM estoque WHERE name LIKE "%{name}%"'
+        # resultado = readDB(comando)
+        # return resultado
+        comando = "SELECT * from estoque WHERE name = %s"
+        resultado = readDB(comando, (name,))
+        if resultado == []:
+            print("Nome não encontrado. Tente novamente!\n")
+        else:
+            return resultado
     
     def searchByID(self, id):
         comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'

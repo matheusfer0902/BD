@@ -23,15 +23,13 @@ def searchMenu():
         return op
 
 def callShowData(resultado):
-    for x in range(len(resultado)):
-                id = resultado[x][0]
-                name = resultado[x][1]
-                author = resultado[x][2]
-                publisher = resultado[x][3]
-                price = float(resultado[x][4])
-                qntdd = int(resultado[x][5])
-                book = module.Book(name, author, publisher, price, qntdd)
-                book.showData(id)
+    for row in resultado:
+            print("Id: ", row[0], )
+            print("Nome: ", row[1])
+            print("Autor: ", row[2])
+            print("Editora: ", row[3])
+            print("Preço: ", row[4])
+            print("Qntdd: ", row[5], "\n")
 
 def getStringInput(prompt):
     while True:
@@ -66,31 +64,10 @@ def getStringToName(prompt):
                 print("Entrada inválida. O texto deve ter no máximo 45 caracteres..")
             else:
                 return value
-
-def createBook():
-    name = getStringToName("Digite o nome do livro: ")
-    author = getStringInput("Digite o nome do autor: ")
-    publisher = getStringInput("Digite o nome da editora: ")
-    price = getFloatInput("Digite o preço do livro: ")
-    qntdd = getIntInput("Digite a quantidade de livros: ")
-    book = module.Book(name, author, publisher, price, qntdd)
-    return book
  
 def showAll():
-    # comando = "select * from publisher"
-
-    # cursor.execute(comando)
-
-    # resultado = cursor.fetchall()
-
-    # for row in resultado:
-    #         print("publisher_Id = ", row[0], )
-    #         print("publisher_name = ", row[1])
-    #         print("publisher_estd  = ", row[2])
-    #         print("publisher_location  = ", row[3])
-    #         print("publisher_type  = ", row[4], "\n")
     comando = "SELECT * FROM estoque"
-    resultado = module.readDB(comando)
+    resultado = module.readDB(comando,[])
     callShowData(resultado)
 
 def updateMenu():
@@ -109,8 +86,8 @@ def getBookFromID():
 
     while True:        
         id = getIntInput("Selecione o ID:")
-        comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
-        resultado = module.readDB(comando)
+        comando = "SELECT * from estoque WHERE id_book = %s"
+        resultado = module.readDB(comando, (id,))
         if resultado == []:
             print("ID não encontrado. Tente novamente!\n")
         else:
@@ -134,7 +111,7 @@ while(on):
                     getStringInput("Digite o nome da editora: "),
                     getFloatInput("Digite o preço do livro: "),
                     getIntInput("Digite a quantidade de livros: "))
-            # book.printBook()
+            bookshelf.printBook(info)
             bookshelf.insertBook(info)
 
             input("\nAperte ENTER para continuar...")
@@ -193,6 +170,7 @@ while(on):
 
                     resultado = getBookFromID()
                     callShowData(resultado)
+                    # bookshelf.showData(resultado[0])
 
                     input("\nAperte ENTER para continuar...")
                 case 3: #BACK TO MENU
