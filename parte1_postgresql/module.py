@@ -142,13 +142,10 @@ class Book:
         return
     
     def searchByName(self, name):
-        # comando = f'SELECT * FROM estoque WHERE name LIKE "%{name}%"'
-        # resultado = readDB(comando)
-        # return resultado
         comando = "SELECT * from estoque WHERE name = %s"
         resultado = readDB(comando, (name,))
         if resultado == []:
-            print("Nome não encontrado. Tente novamente!\n")
+            print("Nome não encontrado!\n")
         else:
             return resultado
     

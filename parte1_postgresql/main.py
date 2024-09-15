@@ -83,15 +83,15 @@ def updateMenu():
 
 #type = 0 to return book, type = 1 to return result
 def getBookFromID():
-
-    while True:        
-        id = getIntInput("Selecione o ID:")
-        comando = "SELECT * from estoque WHERE id_book = %s"
-        resultado = module.readDB(comando, (id,))
-        if resultado == []:
-            print("ID não encontrado. Tente novamente!\n")
-        else:
-            return resultado
+       
+    id = getIntInput("Selecione o ID:")
+    comando = "SELECT * from estoque WHERE id_book = %s"
+    resultado = module.readDB(comando, (id,))
+    if resultado == []:
+        print("ID não encontrado!\n")
+        return resultado
+    else:
+        return resultado
 
 
 
@@ -162,14 +162,16 @@ while(on):
                     os.system('cls')
                     searchName = getStringInput("Digite o nome para pesquisa: ")
                     resultado = bookshelf.searchByName(searchName)
-                    callShowData(resultado)
+                    if resultado:
+                        callShowData(resultado)
 
                     input("\nAperte ENTER para continuar...")
                 case 2: #ID
                     os.system('cls')
 
                     resultado = getBookFromID()
-                    callShowData(resultado)
+                    if resultado:
+                        callShowData(resultado)
                     # bookshelf.showData(resultado[0])
 
                     input("\nAperte ENTER para continuar...")

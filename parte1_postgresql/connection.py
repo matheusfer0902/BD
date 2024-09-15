@@ -6,7 +6,7 @@ connection = psycopg2.connect(
     database="livraria",
     user='postgres',
     password='root',
-    host='localhost',
+    host='26.63.103.162',
     port='5432'
 )
  
