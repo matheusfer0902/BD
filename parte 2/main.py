@@ -104,6 +104,9 @@ while on:
             registerUser()
         case 5:
             on = False
+        case 6:
+            func.updateClient(db)
+            input("\nAperte ENTER para continuar...")
         case _:
             os.system('cls')
             print("Opção inválida")

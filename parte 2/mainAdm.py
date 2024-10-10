@@ -107,19 +107,23 @@ def mainAdm(db, conected):
                     match op:
                         case 1:
                             #cadastrar novo cliente
-                            test()
+                            func.registerClient(db)
                         case 2:
                             #atualizar dados de um cliente
-                            test()
+                            func.updateClient(db)
+                            input("\nAperte ENTER para continuar...")
                         case 3:
                             #listar cliente
-                            test()
+                            users.Cliente.showAllClients(db)
+                            input("\nAperte ENTER para continuar...")
                         case 4:
                             #remover cliente
                             test()
                         case 5:
                             #voltar
                             break
+                        case _:
+                            input("\nOpção inválida")
             case 4:
                 #deslogar
                 test()

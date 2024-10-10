@@ -95,6 +95,58 @@ def getBookFromID(db):
     else:
         return resultado
 
+def registerClient(db):
+    clienteAux = users.Cliente(db, getStringToName("Nome: "), getStringInput("Email: "), getStringToName("Senha: "), getStringInput("Endereço: "), 
+                                            getBolleanInput("É torcedor do Flamengo?"), getBolleanInput("Assiste OnePiece?"), getBolleanInput("Reside em Souza/PB?"))
+    clienteAux.criar_cliente()
+    return
+
+def menuUpdateClient():
+    while True:
+        op = getIntInput("O que você deseja alterar?\n"
+            "1 - Nome\n"
+            "2 - Email\n"
+            "3 - Senha\n"
+            "4 - Endereco\n"
+            "5 - Flamengo\n"
+            "6 - One Piece\n"
+            "7 - Sousa\n")
+        return op
+
+def updateClient(db):
+    while True:
+        os.system('cls')
+        users.Cliente.showAllClients(db)
+        id = getIntInput("Selecione o ID: ")
+        op = menuUpdateClient()
+        match op:
+            case 1:
+                users.Cliente.updateNome(db, id)
+                break
+            case 2:
+                users.Cliente.updateEmail(db, id)
+                break
+            case 3:
+                users.Cliente.updateSenha(db, id)
+                break
+            case 4:
+                users.Cliente.updateEndereco(db, id)
+                break
+            case 5:
+                users.Cliente.updateFlamengo(db, id)
+                break
+            case 6:
+                users.Cliente.updateOnePiece(db, id)
+                break
+            case 7:
+                users.Cliente.updateSousa(db, id)
+                break
+
+def registerSaler(db):
+    vendAux = users.Vendedor(db, getStringToName("Nome: "), getStringInput("Email: "), getStringToName("Senha: "))
+    vendAux.criar_vendedor()
+    return
+
 def insert(db, bookshelf):
     os.system('cls')
 
