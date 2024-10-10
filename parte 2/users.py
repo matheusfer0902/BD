@@ -19,6 +19,14 @@ class Usuario:
         elif(self.tipo_usuario ==2):
             print(f"Usuário {self.nome} criado com sucesso como vendedor.")
 
+    def login(db, info):
+        query = "SELECT * FROM usuario WHERE email = %s AND senha = %s"
+        data = (info[0], info[1])
+        result = db.readDB(query, data)
+        if result:
+            return result[0]
+        return False
+
 
 #######################################################################################################
 #Classe Cliente -> herda de Usuario
