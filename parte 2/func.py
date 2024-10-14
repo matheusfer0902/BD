@@ -253,3 +253,8 @@ def remove(db, bookshelf):
         bookshelf.removeBook(db, qntdd, quantidade, id)
 
     input("\nAperte ENTER para continuar...")
+
+def livrosComPoucoEstoque(db, bookshelf):
+    resultado = bookshelf.poucoEstoque(db)
+    callShowData(resultado)
+    return

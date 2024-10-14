@@ -137,3 +137,8 @@ class Book:
         comando = f'SELECT * FROM estoque WHERE id_book = "{id}"'
         resultado = db.readDB(comando)
         return resultado
+
+    def poucoEstoque(self, db):
+        query = "SELECT * FROM estoque WHERE quantidade < 5"
+        result = db.readDB(query, [])
+        return result

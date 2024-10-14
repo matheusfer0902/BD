@@ -52,7 +52,8 @@ def mainSaler(db, conected):
                 func.remove(db, bookshelf)
             case 6:
                 #Listar livros com pouco estoque
-                test()
+                func.livrosComPoucoEstoque(db, bookshelf)
+                input("\nAperte ENTER para continuar...")
             case 7:
                 #menu Clientes
                 while True:
