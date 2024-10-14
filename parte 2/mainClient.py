@@ -43,7 +43,6 @@ def mainClient(db, conected):
                 #Meus pedidos
                 test()
             case 6:
-                input("\nAperte ENTER para voltar ao menu...")
-                test()
+                return True
             case 7: # SAIR
                 return False

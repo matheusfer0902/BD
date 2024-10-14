@@ -40,9 +40,15 @@ class Usuario:
             print("Id: ", row[0], )
             print("Nome: ", row[1])
             print("Email: ", row[2])
-            print("Senha ", row[3])
             if row[4] == 1:
                 Cliente.showClientAtributes(db, row[0])
+            elif row[4] == 2:
+                Vendendor.showVendedorAtributos(db, row[0])
+
+    def showUsersADM(db, result):
+        for row in result:
+            showUsers(db, result)
+            print("Senha ", row[3])
 
 
 #######################################################################################################
@@ -125,6 +131,11 @@ class Cliente(Usuario):
             print("One Piece: ", row[2])
             print("Sousa: ", row[3], "\n")
 
+    def removeClient(db, id):
+        query = "DELETE FROM cliente WHERE cliente_id = %s"
+        result = db.commitDB(query, (id, ))
+        return
+
 #######################################################################################################
 #Classe Vendedor -> herda de Usuario
 class Vendedor(Usuario):
@@ -142,3 +153,11 @@ class Vendedor(Usuario):
         """ #currval: retorna o id_usuario do ultimo usuario criado e atribui ele como foreign key
         self.db.commitDB(query)
         #print("Vendedor criado com sucesso.")
+
+    def removeClientBySaler(db, id):
+        query = "DELETE FROM cliente WHERE id_usuario = %s"
+        result = db.commitDB(query, (id, ))
+        query = "DELETE FROM usuario WHERE id_usuario = %s"
+        result = db.commitDB(query, (id, ))
+        print("Cliente excluido \n")
+        return

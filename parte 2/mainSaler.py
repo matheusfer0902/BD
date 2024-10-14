@@ -71,11 +71,17 @@ def mainSaler(db, conected):
                             users.Cliente.showAllClients(db)
                             input("\nAperte ENTER para continuar...")
                         case 4:
-                            #remover cliente
-                            test()
+                            # Remover cliente
+                            users.Cliente.showAllClients(db)
+
+                            id = func.getIntInput("Selecione o ID: ")
+
+                            users.Vendedor.removeClientBySaler(db, id)
+
+                            input("\nAperte ENTER para continuar...")
                         case 5:
                             break
             case 8:
-                break
+                return True
             case 9:
                 return False

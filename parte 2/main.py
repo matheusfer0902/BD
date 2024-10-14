@@ -84,6 +84,7 @@ while on:
             func.search(db, bookshelf)
         case 2: # Listar
             func.showAll(db)
+            input("\nAperte ENTER para continuar...")
         case 3: # Login
             os.system('cls')
             conected = loginUser()
