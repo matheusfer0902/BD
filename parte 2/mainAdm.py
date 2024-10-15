@@ -15,6 +15,16 @@ def menuADM():
             "5 - Sair\n")
         return op
 
+def menuAdmClient():
+    while True:
+        op = func.getIntInput("Selecione sua opção\n"
+            "1 - Cadastrar cliente\n"
+            "2 - Atualizar dados de cliente\n"
+            "3 - Listar clientes\n"
+            "4 - Remover cliente\n"
+            "5 - Voltar\n")
+        return op
+
 def menuNaveg():
     while True:
         op = func.getIntInput("Selecione sua opção\n"
@@ -33,19 +43,11 @@ def menuAdmSaler():
             "1 - Cadastrar vendedor\n"
             "2 - Atualizar dados de vendedor\n"
             "3 - Listar vendedores\n"
-            "4 - Remover vendedore\n"
+            "4 - Remover vendedor\n"
             "5 - Voltar\n")
         return op
 
-def menuAdmClient():
-    while True:
-        op = func.getIntInput("Selecione sua opção\n"
-            "1 - Cadastrar cliente\n"
-            "2 - Atualizar dados de cliente\n"
-            "3 - Listar clientes\n"
-            "4 - Remover cliente\n"
-            "5 - Voltar\n")
-        return op
+
 
 bookshelf = bookshelf.Book(0,0,0,0,0) #generic object for calling methods
 def mainAdm(db, conected):
@@ -76,10 +78,13 @@ def mainAdm(db, conected):
                             func.remove(db, bookshelf)
                         case 6:
                             #Listar livros com pouco estoque
-                            test()
+                            func.livrosComPoucoEstoque(db, bookshelf)
+                            input("\nAperte ENTER para continuar...")
                         case 7:
                             #Back to menu
                             break
+                        case _:
+                            input("\nOpção inválida")
             case 2:
                 while True:
                     os.system('cls')
@@ -87,19 +92,23 @@ def mainAdm(db, conected):
                     match op:
                         case 1:
                             #cadastrar novo vendedor
-                            test()
+                            func.registerSaler(db)
                         case 2:
                             #atualizar dados de um vendedor
-                            test()
+                            func.updateSaler(db)
+                            input("\nAperte ENTER para continuar...")
                         case 3:
                             #listar vendedor
-                            test()
+                            users.Vendedor.showAllSalers(db)
+                            input("\nAperte ENTER para continuar...")
                         case 4:
                             #remover vendedor
-                            test()
+                            func.removeSaler(db)
                         case 5:
                             #voltar
                             break
+                        case _:
+                            input("\nOpção inválida")
             case 3:
                 while True:
                     os.system('cls')
@@ -118,7 +127,7 @@ def mainAdm(db, conected):
                             input("\nAperte ENTER para continuar...")
                         case 4:
                             #remover cliente
-                            test()
+                            func.removeClient(db)
                         case 5:
                             #voltar
                             break
@@ -126,7 +135,7 @@ def mainAdm(db, conected):
                             input("\nOpção inválida")
             case 4:
                 #deslogar
-                test()
+                return True
             case 5:
                 #sair
                 return False

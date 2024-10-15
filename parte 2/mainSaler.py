@@ -15,9 +15,10 @@ def menuSaler(name):
             "4 - Listar livros\n"
             "5 - Remover livro\n"
             "6 - Listar livros com pouco estoque\n"
-            "7 - Clientes\n"
-            "8 - Deslogar\n"
-            "9 - Sair\n")
+            "7 - Meu perfil\n"
+            "8 - Clientes\n"
+            "9 - Deslogar\n"
+            "10 - Sair\n")
         return op
 
 def menuSalerClient():
@@ -30,8 +31,13 @@ def menuSalerClient():
                             "5 - Voltar\n")
         return op
 
-
-
+def meuPerfil():
+    while True:
+        op = func.getIntInput("Selecione sua opção\n"
+                            "1 - Dados pessoais\n"
+                            "2 - Relatório de Vendas\n"
+                            "3 - Voltar\n")
+        return op
 
 bookshelf = bookshelf.Book(0,0,0,0,0) #generic object for calling methods
 def mainSaler(db, conected):
@@ -54,7 +60,20 @@ def mainSaler(db, conected):
                 #Listar livros com pouco estoque
                 func.livrosComPoucoEstoque(db, bookshelf)
                 input("\nAperte ENTER para continuar...")
-            case 7:
+            case 7: #Meu perfil
+                while True:
+                    os.system('cls')
+                    op = meuPerfil()
+                    match op:
+                        case 1:
+                            #Dados Pessoais
+                            func.dadosPessoais(db, conected[0])
+                        case 2:
+                            #Relatorio de vendas
+                            test()
+                        case 3:
+                            break
+            case 8:
                 #menu Clientes
                 while True:
                     os.system('cls')
@@ -73,16 +92,12 @@ def mainSaler(db, conected):
                             input("\nAperte ENTER para continuar...")
                         case 4:
                             # Remover cliente
-                            users.Cliente.showAllClients(db)
-
-                            id = func.getIntInput("Selecione o ID: ")
-
-                            users.Vendedor.removeClientBySaler(db, id)
-
-                            input("\nAperte ENTER para continuar...")
+                            func.removeClient(db)
                         case 5:
                             break
-            case 8:
-                return True
+                        case _:
+                            input("\nOpção inválida")
             case 9:
+                return True
+            case 10:
                 return False

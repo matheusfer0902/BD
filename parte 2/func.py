@@ -3,14 +3,6 @@ import users
 import bookshelf
 import os
 
-def searchMenu():
-    while 1:
-        op = getIntInput("Selecione a opção que você deseja pesquisar:\n"
-            "1 - Pesquisar por nome\n"
-            "2 - Pesquisar por ID\n"
-            "3 - Voltar\n")
-        return op
-
 def callShowData(resultado):
     for row in resultado:
             print("Id: ", row[0], )
@@ -20,16 +12,35 @@ def callShowData(resultado):
             print("Preço: ", row[4])
             print("Qntdd: ", row[5], "\n")
 
-def getStringInput(prompt):
-    while True:
-            value = input(prompt)
-            if value.isdigit():
-                print("Entrada inválida. Por favor, digite um texto.")
-            elif len(value) > 45:
-                print("Entrada inválida. O texto deve ter no máximo 45 caracteres.")
-            else:
-                return value
-            
+def dadosPessoais(db, id):
+    os.system('cls')
+    result = users.Usuario.getUserbyID(db, id)
+    users.Usuario.showUsers(db, result)
+    input("\nAperte ENTER para continuar...")
+
+def getBolleanInput(prompt):
+        while True:
+            print(prompt)
+            prompt2 = "0- Não\n1- Sim\n"
+            value = getIntInput(prompt2)
+            match value:
+                case 1:
+                    return True
+                case 0:
+                    return False
+                case _:
+                    print("Opção Inválida\n")
+
+def getBookFromID(db):
+    id = getIntInput("Selecione o ID: ")
+    comando = "SELECT * from estoque WHERE id_book = %s"
+    resultado = db.readDB(comando, (id,))
+    if resultado == []:
+        print("ID não encontrado!\n")
+        return resultado
+    else:
+        return resultado
+
 def getFloatInput(prompt):
     while True:
             try:
@@ -46,6 +57,16 @@ def getIntInput(prompt):
             except ValueError:
                 print("Entrada inválida. Por favor, digite um número inteiro válido.")
 
+def getStringInput(prompt):
+    while True:
+            value = input(prompt)
+            if value.isdigit():
+                print("Entrada inválida. Por favor, digite um texto.")
+            elif len(value) > 45:
+                print("Entrada inválida. O texto deve ter no máximo 45 caracteres.")
+            else:
+                return value
+
 def getStringToName(prompt):
     while True:
             value = input(prompt)
@@ -54,51 +75,23 @@ def getStringToName(prompt):
             else:
                 return value
 
-def getBolleanInput(prompt):
-        while True:
-            print(prompt)
-            prompt2 = "0- Não\n1- Sim\n"
-            value = getIntInput(prompt2)
-            match value:
-                case 1:
-                    return True
-                case 0:
-                    return False
-                case _:
-                    print("Opção Inválida\n")
-
-def showAll(db):
+def insert(db, bookshelf):
     os.system('cls')
-    comando = "SELECT * FROM estoque"
-    resultado = db.readDB(comando,[])
+
+    info = (getStringToName("Digite o nome do livro: "), 
+            getStringInput("Digite o nome do autor: "),
+            getStringInput("Digite o nome da editora: "),
+            getFloatInput("Digite o preço do livro: "),
+            getIntInput("Digite a quantidade de livros: "))
+    bookshelf.printBook(info)
+    bookshelf.insertBook(db, info)
+
+    input("\nAperte ENTER para continuar...")
+
+def livrosComPoucoEstoque(db, bookshelf):
+    os.system('cls')
+    resultado = bookshelf.poucoEstoque(db)
     callShowData(resultado)
-
-def updateMenu():
-     while 1:
-        op = getIntInput("O que você deseja alterar?\n"
-            "1 - Titulo\n"
-            "2 - Autor\n"
-            "3 - Editora\n"
-            "4 - Preço\n"
-            "5 - Quantidade\n"
-            "6 - Voltar\n")
-        return op
-
-def getBookFromID(db):
-       
-    id = getIntInput("Selecione o ID: ")
-    comando = "SELECT * from estoque WHERE id_book = %s"
-    resultado = db.readDB(comando, (id,))
-    if resultado == []:
-        print("ID não encontrado!\n")
-        return resultado
-    else:
-        return resultado
-
-def registerClient(db):
-    clienteAux = users.Cliente(db, getStringToName("Nome: "), getStringInput("Email: "), getStringToName("Senha: "), getStringInput("Endereço: "), 
-                                            getBolleanInput("É torcedor do Flamengo?"), getBolleanInput("Assiste OnePiece?"), getBolleanInput("Reside em Souza/PB?"))
-    clienteAux.criar_cliente()
     return
 
 def menuUpdateClient():
@@ -113,52 +106,75 @@ def menuUpdateClient():
             "7 - Sousa\n")
         return op
 
-def updateClient(db):
+def menuUpdateSaler():
     while True:
-        os.system('cls')
-        users.Cliente.showAllClients(db)
-        id = getIntInput("Selecione o ID: ")
-        op = menuUpdateClient()
-        match op:
-            case 1:
-                users.Cliente.updateNome(db, id)
-                break
-            case 2:
-                users.Cliente.updateEmail(db, id)
-                break
-            case 3:
-                users.Cliente.updateSenha(db, id)
-                break
-            case 4:
-                users.Cliente.updateEndereco(db, id)
-                break
-            case 5:
-                users.Cliente.updateFlamengo(db, id)
-                break
-            case 6:
-                users.Cliente.updateOnePiece(db, id)
-                break
-            case 7:
-                users.Cliente.updateSousa(db, id)
-                break
+        op = getIntInput("O que você deseja alterar?\n"
+            "1 - Nome\n"
+            "2 - Email\n"
+            "3 - Senha\n")
+        return op
+
+def registerClient(db):
+    clienteAux = users.Cliente(db, getStringToName("Nome: "), getStringInput("Email: "), getStringToName("Senha: "), getStringInput("Endereço: "), 
+                                            getBolleanInput("É torcedor do Flamengo?"), getBolleanInput("Assiste OnePiece?"), getBolleanInput("Reside em Souza/PB?"))
+    clienteAux.criar_cliente()
+    login = (clienteAux.email, clienteAux.senha)
+    return login
 
 def registerSaler(db):
     vendAux = users.Vendedor(db, getStringToName("Nome: "), getStringInput("Email: "), getStringToName("Senha: "))
     vendAux.criar_vendedor()
     return
 
-def insert(db, bookshelf):
+def remove(db, bookshelf):
     os.system('cls')
+    showAll(db)
 
-    info = (getStringToName("Digite o nome do livro: "), 
-            getStringInput("Digite o nome do autor: "),
-            getStringInput("Digite o nome da editora: "),
-            getFloatInput("Digite o preço do livro: "),
-            getIntInput("Digite a quantidade de livros: "))
-    bookshelf.printBook(info)
-    bookshelf.insertBook(db, info)
+    resultado = getBookFromID(db)
+    os.system('cls')
+    callShowData(resultado)
+
+    id = resultado[0][0]
+    qntdd = int(resultado[0][5])
+
+    quantidade = getIntInput("Qual a quantidade a ser removida? ")
+    if(qntdd - quantidade <= 0):
+        print("ATENÇÃO: Essa ação irá EXCLUIR o livro do estoque\n"
+                "Essa ação não poderá ser desfeita!\n")
+        while True:
+            op = getIntInput("Deseja continuar?[0 - não ou 1 - sim] ")
+            if op == 1:
+                bookshelf.removeBook(db, qntdd, quantidade, id)
+                break
+            elif op == 0:
+                break
+            elif op != 0 & op != 1:
+                print("Opção Inválida, tente novamente.")
+
+    else:
+        bookshelf.removeBook(db, qntdd, quantidade, id)
 
     input("\nAperte ENTER para continuar...")
+
+def removeClient(db):
+    users.Cliente.showAllClients(db)
+    id = getIntInput("Selecione o ID: ")
+    users.Cliente.removeClient(db, id)
+    print("Cliente excluido \n")
+    input("Aperte ENTER para continuar...")
+    return
+
+def removeClientAccount(db, id):
+    users.Cliente.removeClient(db, id)
+    input("\nSeu usuário foi removido! Aperte ENTER para voltar ao menu inicial.")
+    return
+
+def removeSaler(db):
+    users.Vendedor.showAllSalers(db)
+    id = getIntInput("Selecione o ID: ")
+    users.Vendedor.removeSaler(db, id)
+    input("\nAperte ENTER para continuar...")
+    return
 
 def search(db, bookshelf):
     os.system('cls')
@@ -178,13 +194,26 @@ def search(db, bookshelf):
             resultado = getBookFromID(db)
             if resultado:
                 callShowData(resultado)
-            # bookshelf.showData(resultado[0])
 
             input("\nAperte ENTER para continuar...")
         case 3: #BACK TO MENU
             input("\nAperte ENTER para voltar ao menu...")
         case _:
             print("Opção inválida")
+
+def searchMenu():
+    while 1:
+        op = getIntInput("Selecione a opção que você deseja pesquisar:\n"
+            "1 - Pesquisar por nome\n"
+            "2 - Pesquisar por ID\n"
+            "3 - Voltar\n")
+        return op
+
+def showAll(db):
+    os.system('cls')
+    comando = "SELECT * FROM estoque"
+    resultado = db.readDB(comando,[])
+    callShowData(resultado)
 
 def update(db, bookshelf):
     os.system('cls')
@@ -224,37 +253,69 @@ def update(db, bookshelf):
         case 6: #BACK TO MENU
             input("\nAperte ENTER para voltar ao menu...")
         case _:
-            print("Opção inválida")
+            input("\nOpção inválida, aperte ENTER para continuar...")
 
-def remove(db, bookshelf):
-    showAll(db)
-
-    resultado = getBookFromID(db)
-    callShowData(resultado)
-
-    id = resultado[0][0]
-    qntdd = int(resultado[0][5])
-
-    quantidade = getIntInput("Qual a quantidade a ser removida? ")
-    if(qntdd - quantidade <= 0):
-        print("ATENÇÃO: Essa ação irá EXCLUIR o livro do estoque\n"
-                "Essa ação não poderá ser desfeita!\n")
-        while True:
-            op = getIntInput("Deseja continuar?[0 - não ou 1 - sim] ")
-            if op == 1:
-                bookshelf.removeBook(db, qntdd, quantidade, id)
+def updateClient(db):
+    while True:
+        os.system('cls')
+        users.Cliente.showAllClients(db)
+        id = getIntInput("Selecione o ID: ")
+        op = menuUpdateClient()
+        match op:
+            case 1:
+                users.Usuario.updateNome(db, id)
                 break
-            elif op == 0:
+            case 2:
+                users.Usuario.updateEmail(db, id)
                 break
-            elif op != 0 & op != 1:
-                print("Opção Inválida, tente novamente.")
+            case 3:
+                users.Usuario.updateSenha(db, id)
+                break
+            case 4:
+                users.Cliente.updateEndereco(db, id)
+                break
+            case 5:
+                users.Cliente.updateFlamengo(db, id)
+                break
+            case 6:
+                users.Cliente.updateOnePiece(db, id)
+                break
+            case 7:
+                users.Cliente.updateSouza(db, id)
+                break
+            case _:
+                print("Opção inválida")
+                continue
+    return
 
-    else:
-        bookshelf.removeBook(db, qntdd, quantidade, id)
+def updateMenu():
+    while 1:
+        op = getIntInput("O que você deseja alterar?\n"
+            "1 - Nome\n"
+            "2 - Autor\n"
+            "3 - Editora\n"
+            "4 - Preço\n"
+            "5 - Quantidade\n"
+            "6 - Voltar\n")
+        return op
 
-    input("\nAperte ENTER para continuar...")
-
-def livrosComPoucoEstoque(db, bookshelf):
-    resultado = bookshelf.poucoEstoque(db)
-    callShowData(resultado)
+def updateSaler(db):
+    while True:
+        os.system('cls')
+        users.Vendedor.showAllSalers(db)
+        id = getIntInput("Selecione o ID: ")
+        op = menuUpdateSaler()
+        match op:
+            case 1:
+                users.Usuario.updateNome(db, id)
+                break
+            case 2:
+                users.Usuario.updateEmail(db, id)
+                break
+            case 3:
+                users.Usuario.updateSenha(db, id)
+                break
+            case _:
+                print("Opção inválida")
+                continue
     return

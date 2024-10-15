@@ -15,10 +15,18 @@ def menuClient(name):
             "1 - Comprar um livro\n"
             "2 - Pesquisar livro\n"
             "3 - Listar livros\n"
-            "4 - Dados pessoais\n"
-            "5 - Meus pedidos\n"
-            "6 - Deslogar\n"
-            "7 - Sair\n")
+            "4 - Meu perfil\n"
+            "5 - Deslogar\n"
+            "6 - Sair\n")
+        return op
+
+def meuPerfil():
+    while True:
+        op = func.getIntInput("Selecione sua opção\n"
+                            "1 - Dados pessoais\n"
+                            "2 - Meus pedidos\n"
+                            "3 - Remover conta\n"
+                            "4 - Voltar\n")
         return op
 
 bookshelf = bookshelf.Book(0,0,0,0,0) #generic object for calling methods
@@ -36,13 +44,25 @@ def mainClient(db, conected):
             case 3: # LISTAR LIVROS
                 func.showAll(db)
                 input("\nAperte ENTER para continuar...")
-            case 4:
-                #Dados pessoais
-                test()
-            case 5:
-                #Meus pedidos
-                test()
-            case 6:
+            case 4: #Meu perfil
+                while True:
+                    os.system('cls')
+                    op = meuPerfil()
+                    match op:
+                        case 1:
+                            #Dados Pessoais
+                            func.dadosPessoais(db, conected[0])
+                        case 2:
+                            #Meus pedidos
+                            test()
+                        case 3:
+                            func.removeClientAccount(db, conected[0])
+                            return True
+                        case 4:
+                            break
+            case 5: #DESLOGAR
                 return True
-            case 7: # SAIR
+            case 6: # SAIR
                 return False
+            case _: 
+                input("\nOpção inválida, aperte ENTER para continuar...")
