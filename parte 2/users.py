@@ -19,8 +19,13 @@ class Usuario:
         if(self.tipo_usuario == 1):
             input(f"Usuário {self.nome} criado com sucesso como cliente. Aperte ENTER para continuar...\n")
 
-        elif(self.tipo_usuario ==2):
+        elif(self.tipo_usuario == 2):
             input(f"Usuário {self.nome} criado com sucesso como vendedor. Aperte ENTER para continuar...\n")
+
+    def getUserbyID(db, id):
+        query = "SELECT * FROM usuario WHERE id_usuario = %s"
+        result = db.readDB(query, (id,))
+        return result
 
     def login(db, info):
         query = "SELECT * FROM usuario WHERE email = %s AND senha = %s"
@@ -29,11 +34,6 @@ class Usuario:
         if result:
             return result[0]
         return False
-    
-    def getUserbyID(db, id):
-        query = "SELECT * FROM usuario WHERE id_usuario = %s"
-        result = db.readDB(query, (id,))
-        return result
 
     def showUsers(db, result):
         for row in result:
@@ -43,12 +43,31 @@ class Usuario:
             if row[4] == 1:
                 Cliente.showClientAtributes(db, row[0])
             elif row[4] == 2:
-                Vendendor.showVendedorAtributos(db, row[0])
+                print("\n")
 
     def showUsersADM(db, result):
         for row in result:
             showUsers(db, result)
             print("Senha ", row[3])
+
+    def updateEmail(db, id):
+        new_email = func.getStringToName("Qual novo email? ")
+        result = Usuario.getUserbyID(db, id)
+        query = "UPDATE usuario SET email = %s WHERE id_usuario = %s"
+        db.commitDB(query, (new_email, id))
+
+    def updateNome(db, id):
+        new_nome = func.getStringToName("Qual novo nome? ")
+        result = Usuario.getUserbyID(db, id)
+        query = "UPDATE usuario SET nome = %s WHERE id_usuario = %s"
+        db.commitDB(query, (new_nome, id))
+
+    def updateSenha(db, id):
+        new_senha = func.getStringToName("Qual nova senha? ")
+        result = Usuario.getUserbyID(db, id)
+        query = "UPDATE usuario SET senha = %s WHERE id_usuario = %s"
+        db.commitDB(query, (new_senha, id))
+
 
 
 #######################################################################################################
@@ -73,31 +92,47 @@ class Cliente(Usuario):
         self.db.commitDB(query, (self.endereco, self.flamengo, self.one_piece, self.sousa))
         #print("Cliente criado com sucesso.")
 
-    def updateNome(db, id):
-        new_nome = func.getStringToName("Qual novo nome? ")
-        result = Usuario.getUserbyID(db, id)
-        #showAllClients(db, result)
-        query = "UPDATE usuario SET nome = %s WHERE id_usuario = %s"
-        db.commitDB(query, (new_nome, id))
 
-    def updateEmail(db, id):
-        new_email = func.getStringToName("Qual novo email? ")
-        result = Usuario.getUserbyID(db, id)
-        query = "UPDATE usuario SET email = %s WHERE id_usuario = %s"
-        db.commitDB(query, (new_email, id))
+    def criar_cliente(self):
+        # Primeiro, cria o usuário
+        self.criar_usuario()
+        
+        # Depois, adiciona dados específicos de cliente
+        query = """
+        INSERT INTO cliente (id_usuario, endereco, flamengo, one_piece, sousa)
+        VALUES (currval('usuario_id_usuario_seq'), %s, %s, %s, %s) 
+        """ #currval: retorna o id_usuario do ultimo usuario criado e atribui ele como foreign key
+        self.db.commitDB(query, (self.endereco, self.flamengo, self.one_piece, self.sousa))
+        #print("Cliente criado com sucesso.")
 
-    def updateSenha(db, id):
-        new_senha = func.getStringToName("Qual nova senha? ")
-        result = Usuario.getUserbyID(db, id)
-        query = "UPDATE usuario SET senha = %s WHERE id_usuario = %s"
-        db.commitDB(query, (new_senha, id))
+    def removeClient(db, id):
+        query = "DELETE FROM cliente WHERE id_usuario = %s"
+        result = db.commitDB(query, (id, ))
+        query = "DELETE FROM usuario WHERE id_usuario = %s"
+        result = db.commitDB(query, (id, ))
+        return
+
+    def showAllClients(db):
+        os.system('cls')
+        query = "SELECT * FROM usuario WHERE tipo_usuario = 1"
+        result = db.readDB(query, [])
+        Usuario.showUsers(db, result)
+
+    def showClientAtributes(db, id):
+        query = "SELECT endereco, flamengo, one_piece, sousa FROM cliente WHERE id_usuario = %s"
+        result = db.readDB(query, (id, ))
+        for row in result:
+            print("Endereco: ", row[0])
+            print("Flamengo: ", row[1])
+            print("One Piece: ", row[2])
+            print("Sousa: ", row[3], "\n")
 
     def updateEndereco(db, id):
         new_end = func.getStringInput("Qual novo endereco? ")
         result = Usuario.getUserbyID(db, id)
         query = "UPDATE cliente SET endereco = %s WHERE id_usuario = %s"
         db.commitDB(query, (new_end, id))
-    
+
     def updateFlamengo(db, id):
         new_flamengo = func.getBolleanInput("É torcedor do Flamengo?")
         result = Usuario.getUserbyID(db, id)
@@ -116,25 +151,6 @@ class Cliente(Usuario):
         query = "UPDATE cliente SET sousa = %s WHERE id_usuario = %s"
         db.commitDB(query, (new_sousa, id))
 
-    def showAllClients(db):
-        os.system('cls')
-        query = "SELECT * FROM usuario WHERE tipo_usuario = 1"
-        result = db.readDB(query,[])
-        Usuario.showUsers(db, result)
-
-    def showClientAtributes(db, id):
-        query = "SELECT endereco, flamengo, one_piece, sousa FROM cliente WHERE id_usuario = %s"
-        result = db.readDB(query, (id, ))
-        for row in result:
-            print("Endereco: ", row[0])
-            print("Flamengo: ", row[1])
-            print("One Piece: ", row[2])
-            print("Sousa: ", row[3], "\n")
-
-    def removeClient(db, id):
-        query = "DELETE FROM cliente WHERE cliente_id = %s"
-        result = db.commitDB(query, (id, ))
-        return
 
 #######################################################################################################
 #Classe Vendedor -> herda de Usuario
@@ -154,10 +170,16 @@ class Vendedor(Usuario):
         self.db.commitDB(query)
         #print("Vendedor criado com sucesso.")
 
-    def removeClientBySaler(db, id):
+    def removeSaler(db, id):
         query = "DELETE FROM cliente WHERE id_usuario = %s"
         result = db.commitDB(query, (id, ))
         query = "DELETE FROM usuario WHERE id_usuario = %s"
         result = db.commitDB(query, (id, ))
         print("Cliente excluido \n")
         return
+
+    def showAllSalers(db):
+        os.system('cls')
+        query = "SELECT * FROM usuario WHERE tipo_usuario = 2"
+        result = db.readDB(query,[])
+        Usuario.showUsers(db, result)
