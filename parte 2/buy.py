@@ -51,6 +51,8 @@ def criarPedido(db, conected):
     
     os.system('cls')
     valor_total = calcular_valor_total(db, livros, cliente_id)
+    if valor_total == 0:
+        return
     print(f"Valor total: R$ {valor_total}")
 
     forma_pagamento = selectFormaPagamento()
