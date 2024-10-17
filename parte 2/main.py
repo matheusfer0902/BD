@@ -5,6 +5,7 @@ import bookshelf
 import mainAdm 
 import mainClient
 import mainSaler
+import buy
 import os
 
 # Dar a op de comprar o livro quando pesquisar ou listar, para entao fazer o login
@@ -79,6 +80,7 @@ bookshelf = bookshelf.Book(0,0,0,0,0) #generic object for calling methods
 def test():
     return 0
 
+conected = ()
 while on:
     os.system('cls')
     op = int(mainMenu())
@@ -108,9 +110,8 @@ while on:
             on = mainClient.mainClient(db, conected)
         case 5:
             on = False
-        # case 6: #usando apenas para teste
-        #     func.updateClient(db)
-        #     input("\nAperte ENTER para continuar...")
+        case 6: #usando apenas para teste
+            buy.criarPedido(db, conected)
         case _:
             os.system('cls')
             print("Opção inválida")

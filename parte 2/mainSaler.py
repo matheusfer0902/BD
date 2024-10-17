@@ -2,6 +2,7 @@ import connection
 import func
 import users
 import bookshelf
+import buy
 import os
 
 # Dei o poder de criar e editar dados dos clientes. De resto o vendedor é basicamente a parte 1 do projeto
@@ -101,3 +102,5 @@ def mainSaler(db, conected):
                 return True
             case 10:
                 return False
+            case 11: #usando apenas para teste
+                buy.criarPedido(db, conected)   
