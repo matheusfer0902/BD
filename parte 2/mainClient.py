@@ -2,6 +2,7 @@ import connection
 import func
 import users
 import bookshelf
+import buy
 import os
 
 # Lembrar que quando essa função for chamada, é necessario dar aa opção de compra para o cliente. Ex:
@@ -54,7 +55,7 @@ def mainClient(db, conected):
                             func.dadosPessoais(db, conected[0])
                         case 2:
                             #Meus pedidos
-                            test()
+                            buy.MeusPedidos(db, conected[4], conected[0])
                         case 3:
                             func.removeClientAccount(db, conected[0])
                             return True

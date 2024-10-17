@@ -53,14 +53,14 @@ class Book:
                         case 1:
                             id = resultado[0][0]
                             qntddID = resultado[0][5]
-                            self.updateQuantity(id, info[4]+qntddID)
+                            self.updateQuantity(db, id, info[4]+qntddID)
                             print("Quantidade atualizada!")
                             break
                         case 2:
                             id = resultado[0][0]
                             qntddID = resultado[0][5]
-                            self.updatePrice(id, info[3])
-                            self.updateQuantity(id, info[4]+qntddID)
+                            self.updatePrice(db, id, info[3])
+                            self.updateQuantity(db, id, info[4]+qntddID)
                             print("Quantidade e preço atualizados!")
                             break
                         case _:
@@ -68,7 +68,7 @@ class Book:
             else:
                 id = resultado[0][0]
                 qntddID = resultado[0][5]
-                self.updateQuantity(id, info[4]+qntddID)
+                self.updateQuantity(db, id, info[4]+qntddID)
                 print("Quantidade atualizada!")
         return
 
@@ -113,7 +113,7 @@ class Book:
         
         
         if(qntdd - quantidade <= 0):
-            comando = "DELETE FROM estoque WHERE id_book = %s"
+            comando = "UPDATE estoque SET quantidade = 0 WHERE id_book = %s"
             db.commitDB(comando, (id,))
 
         else:

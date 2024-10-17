@@ -212,8 +212,16 @@ def searchMenu():
 def showAll(db):
     os.system('cls')
     comando = "SELECT * FROM estoque"
-    resultado = db.readDB(comando,[])
-    callShowData(resultado)
+    estoque = db.readDB(comando,[])
+
+    #NAO PRINTA OS LIVROS QUE ESTÃO ZERADOS NO ESTOQUE
+    query = "SELECT * FROM estoque WHERE quantidade = 0"
+    resultado = db.readDB(query)
+    for livro in resultado:
+        estoque.remove(livro)
+    
+
+    callShowData(estoque)
 
 def update(db, bookshelf):
     os.system('cls')

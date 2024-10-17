@@ -36,8 +36,9 @@ def meuPerfil():
     while True:
         op = func.getIntInput("Selecione sua opção\n"
                             "1 - Dados pessoais\n"
-                            "2 - Relatório de Vendas\n"
-                            "3 - Voltar\n")
+                            "2 - Minhas vendas\n"
+                            "3 - Relatório de Vendas\n"
+                            "4 - Voltar\n")
         return op
 
 bookshelf = bookshelf.Book(0,0,0,0,0) #generic object for calling methods
@@ -70,9 +71,12 @@ def mainSaler(db, conected):
                             #Dados Pessoais
                             func.dadosPessoais(db, conected[0])
                         case 2:
-                            #Relatorio de vendas
-                            test()
+                            #Meus pedidos
+                            buy.MeusPedidos(db, conected[4], conected[0])
                         case 3:
+                            #Relatório de vendas
+                            test()
+                        case 4:
                             break
             case 8:
                 #menu Clientes
