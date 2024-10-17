@@ -50,7 +50,7 @@ def criarPedido(db, conected):
         livros.append((livro_id, qntdd))
     
     os.system('cls')
-    valor_total = calcular_valor_total(db, livros)
+    valor_total = calcular_valor_total(db, livros, cliente_id)
     print(f"Valor total: R$ {valor_total}")
 
     forma_pagamento = selectFormaPagamento()
@@ -74,7 +74,7 @@ def criarPedido(db, conected):
     
     id_pedido = 0
     if confirmar:
-        info = (valor_total, forma_pagamento, status_pagamento, cliente_id[0], vendedor_id)
+        info = (valor_total, forma_pagamento, status_pagamento, cliente_id[0], vendedor_id[0])
         # Insere o pedido na tabela 'pedido' e retorna o seu id
         id_pedido = insertPedido(db, info)
 
@@ -151,13 +151,18 @@ def selectCliente(db): #tratamento de erro
             nome = db.readDB(query, (id,))
             return [result[0][0], nome[0][0]]
 
-def calcular_valor_total(db, livros):
+def calcular_valor_total(db, livros, cliente_id):
     total = 0
     for livro_id, quantidade in livros:
         # Consultar o preço do livro no banco de dados
         query = "SELECT price FROM estoque WHERE id_book = %s"
         result = db.readDB(query, (livro_id, ))
         total += result[0][0] * quantidade
+    query = "SELECT flamengo, one_piece, sousa FROM cliente WHERE cliente_id = %s"
+    result = db.readDB(query, (cliente_id[0], ))
+    if result[0][0] or result[0][1] or result[0][2]:
+        print("Você recebeu um desconto!")
+        total = total - (total*10/100)
     return total
 
 def insertPedido(db, info):

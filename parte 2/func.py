@@ -215,13 +215,18 @@ def showAll(db):
     estoque = db.readDB(comando,[])
 
     #NAO PRINTA OS LIVROS QUE ESTÃO ZERADOS NO ESTOQUE
-    query = "SELECT * FROM estoque WHERE quantidade = 0"
+    query = "SELECT * FROM estoque WHERE quantidade > 0"
     resultado = db.readDB(query)
-    for livro in resultado:
-        estoque.remove(livro)
-    
+    if resultado:
+        for livro in resultado:
+            estoque.append(livro)
+        
 
-    callShowData(estoque)
+        callShowData(estoque)
+    else:
+        os.system('cls')
+        print("Sem livros no estoque!\n")
+
 
 def update(db, bookshelf):
     os.system('cls')
