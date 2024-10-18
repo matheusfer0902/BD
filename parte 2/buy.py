@@ -53,7 +53,7 @@ def criarPedido(db, conected):
     valor_total = calcular_valor_total(db, livros, cliente_id)
     if valor_total == 0:
         return
-    print(f"Valor total: R$ {valor_total}")
+    print(f"Valor total: R$ {valor_total:.2f}")
 
     forma_pagamento = selectFormaPagamento()
     status_pagamento = "pendente"  # Inicialmente o pagamento está pendente
@@ -97,7 +97,7 @@ def selectBook(db, original): #tratamento de erro
     while True:
         os.system('cls')
         func.showAll(db)
-        livro_id = func.getIntInput("Selecione o ID do livro [ou -1 para finalizar]: ") 
+        livro_id = func.getIntInputToInsert("Selecione o ID do livro [ou -1 para finalizar]: ") 
         for id_book, qntdd in original: 
             if livro_id == id_book:
                 return livro_id

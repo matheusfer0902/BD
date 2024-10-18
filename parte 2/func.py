@@ -38,29 +38,46 @@ def getBookFromID(db):
     resultado = db.readDB(comando, (id,))
     if resultado == []:
         print("ID não encontrado!\n")
-        return resultado
+        return []
     else:
         return resultado
 
 def getFloatInput(prompt):
     while True:
-            try:
-                value = float(input(prompt))
+        try:
+            value = float(input(prompt))
+            if value >= 0:
                 return value
-            except ValueError:
-                print("Entrada inválida. Por favor, digite um número válido.")
+            else:
+                print("Por favor, digite um número inteiro positivo.")
+        except ValueError:
+            print("Entrada inválida. Por favor, digite um número válido.")
 
 def getIntInput(prompt):
-        while True:
-            try:
-                value = int(input(prompt))
+    while True:
+        try:
+            value = int(input(prompt))
+            if value >= 0:
                 return value
-            except ValueError:
-                print("Entrada inválida. Por favor, digite um número inteiro válido.")
+            else:
+                print("Por favor, digite um número inteiro positivo.")
+        except ValueError:
+            print("Entrada inválida. Por favor, digite um número inteiro válido.")
+
+def getIntInputToInsert(prompt):
+    while True:
+        try:
+            value = int(input(prompt))
+            if value >= 0 or value == -1:
+                return value
+            else:
+                print("Por favor, digite um número inteiro positivo ou -1.")
+        except ValueError:
+            print("Entrada inválida. Por favor, digite um número inteiro válido.")
 
 def getStringInput(prompt):
     while True:
-            value = input(prompt)
+            value = input(prompt).lower()
             if value.isdigit():
                 print("Entrada inválida. Por favor, digite um texto.")
             elif len(value) > 45:
@@ -70,7 +87,7 @@ def getStringInput(prompt):
 
 def getStringToName(prompt):
     while True:
-            value = input(prompt)
+            value = input(prompt).lower()
             if len(value) > 45:
                 print("Entrada inválida. O texto deve ter no máximo 45 caracteres..")
             else:
@@ -185,28 +202,23 @@ def search(db, bookshelf):
             os.system('cls')
             searchName = getStringInput("Digite o nome para pesquisa: ")
             resultado = bookshelf.searchByName(db, searchName)
-            if resultado[0][5]:
-                if resultado:
-                    callShowData(resultado)
-            else:
-                print("Livro sem estoque")
+            if resultado:
+                callShowData(resultado)
 
             input("\nAperte ENTER para continuar...")
         case 2: #ID
             os.system('cls')
 
             resultado = getBookFromID(db)
-            if resultado[0][5]:
-                if resultado:
-                    callShowData(resultado)
-            else:
-                print("Livro sem estoque")
+
+            if resultado:
+                callShowData(resultado)
 
             input("\nAperte ENTER para continuar...")
         case 3: # FAIXA DE PREÇO
             os.system('cls')
 
-            faixa = getIntInput("Digite o preço máximo (Exemplo: Para livros de até 50 reais, digite 50): ")
+            faixa = getFloatInput("Digite o preço máximo (Exemplo: Para livros de até 50 reais, digite 50): ")
 
             data = bookshelf.searchByPrice(db, faixa)
             
