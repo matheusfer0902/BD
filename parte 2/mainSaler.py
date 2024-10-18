@@ -10,16 +10,17 @@ def menuSaler(name):
     while 1:
         op = func.getIntInput(f"Ola! {name}\n"
             "Selecione sua opção\n"
-            "1 - Inserir novo livro\n"
-            "2 - Editar dados de livros\n"
-            "3 - Pesquisar livro\n"
-            "4 - Listar livros\n"
-            "5 - Remover livro\n"
-            "6 - Listar livros com pouco estoque\n"
-            "7 - Meu perfil\n"
-            "8 - Clientes\n"
-            "9 - Deslogar\n"
-            "10 - Sair\n")
+            "1 - Realizar novo pedido\n"
+            "2 - Inserir novo livro\n"
+            "3 - Editar dados de livros\n"
+            "4 - Pesquisar livro\n"
+            "5 - Listar livros\n"
+            "6 - Remover livro\n"
+            "7 - Listar livros com pouco estoque\n"
+            "8 - Meu perfil\n"
+            "9 - Clientes\n"
+            "10 - Deslogar\n"
+            "11 - Sair\n")
         return op
 
 def menuSalerClient():
@@ -47,22 +48,24 @@ def mainSaler(db, conected):
         os.system('cls')
         op = menuSaler(conected[1])
         match op:
-            case 1: # INSERIR LIVRO
+            case 1: # CRIAR NOVO PEDIDO
+                buy.criarPedido(db, conected) 
+            case 2: # INSERIR LIVRO
                 func.insert(db, bookshelf)
-            case 2: # UPDATE LIVRO
+            case 3: # UPDATE LIVRO
                 func.update(db, bookshelf)                
-            case 3: # PESQUISAR LIVRO
+            case 4: # PESQUISAR LIVRO
                 func.search(db, bookshelf)
-            case 4:
+            case 5:
                 func.showAll(db)
                 input("\nAperte ENTER para continuar...")   
-            case 5: # REMOVE LIVROS
+            case 6: # REMOVE LIVROS
                 func.remove(db, bookshelf)
-            case 6:
+            case 7:
                 #Listar livros com pouco estoque
                 func.livrosComPoucoEstoque(db, bookshelf)
                 input("\nAperte ENTER para continuar...")
-            case 7: #Meu perfil
+            case 8: #Meu perfil
                 while True:
                     os.system('cls')
                     op = meuPerfil()
@@ -78,7 +81,7 @@ def mainSaler(db, conected):
                             test()
                         case 4:
                             break
-            case 8:
+            case 9:
                 #menu Clientes
                 while True:
                     os.system('cls')
@@ -102,9 +105,10 @@ def mainSaler(db, conected):
                             break
                         case _:
                             input("\nOpção inválida")
-            case 9:
-                return True
             case 10:
+                return True
+            case 11:
                 return False
-            case 11: #usando apenas para teste
-                buy.criarPedido(db, conected)   
+            case _: 
+                input("\nOpção inválida, aperte ENTER para continuar...")
+                  

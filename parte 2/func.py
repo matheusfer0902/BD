@@ -5,6 +5,7 @@ import os
 
 def callShowData(resultado):
     for row in resultado:
+        if not row[5] == 0:
             print("Id: ", row[0], )
             print("Nome: ", row[1])
             print("Autor: ", row[2])
@@ -184,19 +185,36 @@ def search(db, bookshelf):
             os.system('cls')
             searchName = getStringInput("Digite o nome para pesquisa: ")
             resultado = bookshelf.searchByName(db, searchName)
-            if resultado:
-                callShowData(resultado)
+            if resultado[0][5]:
+                if resultado:
+                    callShowData(resultado)
+            else:
+                print("Livro sem estoque")
 
             input("\nAperte ENTER para continuar...")
         case 2: #ID
             os.system('cls')
 
             resultado = getBookFromID(db)
-            if resultado:
-                callShowData(resultado)
+            if resultado[0][5]:
+                if resultado:
+                    callShowData(resultado)
+            else:
+                print("Livro sem estoque")
 
             input("\nAperte ENTER para continuar...")
-        case 3: #BACK TO MENU
+        case 3: # FAIXA DE PREÇO
+            os.system('cls')
+
+            faixa = getIntInput("Digite o preço máximo (Exemplo: Para livros de até 50 reais, digite 50): ")
+
+            data = bookshelf.searchByPrice(db, faixa)
+            
+            callShowData(data)
+
+            input("\nAperte ENTER para continuar...")
+
+        case 4: #BACK TO MENU
             input("\nAperte ENTER para voltar ao menu...")
         case _:
             print("Opção inválida")
@@ -206,7 +224,8 @@ def searchMenu():
         op = getIntInput("Selecione a opção que você deseja pesquisar:\n"
             "1 - Pesquisar por nome\n"
             "2 - Pesquisar por ID\n"
-            "3 - Voltar\n")
+            "3 - Pesquisar por faixa de preço\n"
+            "4 - Voltar\n")
         return op
 
 def showAll(db):

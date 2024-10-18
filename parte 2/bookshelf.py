@@ -142,3 +142,12 @@ class Book:
         query = "SELECT * FROM estoque WHERE quantidade < 5"
         result = db.readDB(query, [])
         return result
+
+    def searchByPrice(self, db, price):
+        query = "SELECT * FROM estoque WHERE price <= %s"
+        result = db.readDB(query, (price, ))
+        if result == []:
+            print("Não existem livros com essa faixa de preço.\n")
+        else:
+            return result
+        

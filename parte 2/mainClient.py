@@ -37,9 +37,8 @@ def mainClient(db, conected):
         os.system('cls')
         op = menuClient(conected[1])
         match op:
-            case 1:
-                #Comprar livro
-                test()
+            case 1: # REALIZAR PEDIDO
+                buy.criarPedido(db, conected)
             case 2: # PESQUISAR LIVRO
                 func.search(db, bookshelf)
             case 3: # LISTAR LIVROS
