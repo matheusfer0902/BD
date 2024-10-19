@@ -10,7 +10,7 @@ import os
 # 2- 
 
 
-bookshelf = bookshelf.Book(0,0,0,0,0) #generic object for calling methods
+bookshelf = bookshelf.Book(0,0,0,0,0,0,0) #generic object for calling methods
 
 def criarPedido(db, conected):
     if conected == ():
