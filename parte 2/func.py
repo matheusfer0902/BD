@@ -2,6 +2,7 @@ import connection
 import users
 import bookshelf
 import os
+from datetime import date
 
 def callShowData(resultado):
     for row in resultado:
@@ -143,6 +144,26 @@ def registerSaler(db):
     vendAux = users.Vendedor(db, getStringToName("Nome: "), getStringInput("Email: "), getStringToName("Senha: "))
     vendAux.criar_vendedor()
     return
+
+def relatorioMenu():
+    while 1:
+        op = getIntInput("Selecione a opção de relatório:\n"
+            "1 - Diário\n"
+            "2 - Mensal\n"
+            "3 - Total\n"
+            "4 - Voltar\n")
+        return op
+
+def relatorioVendas(db, id_vendedor):
+    os.system('cls')
+    op = relatorioMenu()
+    match op:
+        case 1:
+            query = "SELECT * FROM relatorio_vendas_vendedor_unico(%s, %s, %s)"
+            info = (id_vendedor, date.today().strftime('%Y-%m-%d'), date.today().strftime('%Y-%m-%d'))
+            result = db.readDB(query, info)
+            print(info, result)
+            input("enter")
 
 def remove(db, bookshelf):
     os.system('cls')

@@ -78,7 +78,7 @@ def mainSaler(db, conected):
                             buy.MeusPedidos(db, conected[4], conected[0])
                         case 3:
                             #Relatório de vendas
-                            test()
+                            func.relatorioVendas(db, conected[0])
                         case 4:
                             break
             case 9:
