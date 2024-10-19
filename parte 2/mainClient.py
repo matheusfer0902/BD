@@ -30,7 +30,7 @@ def meuPerfil():
                             "4 - Voltar\n")
         return op
 
-bookshelf = bookshelf.Book(0,0,0,0,0) #generic object for calling methods
+bookshelf = bookshelf.Book(0,0,0,0,0,0,0) #generic object for calling methods
 on = True
 def mainClient(db, conected):
     while on:

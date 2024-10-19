@@ -2,12 +2,14 @@ import connection
 import os
 
 class Book:
-    def __init__(self, name, author, publisher, price, qntdd):
+    def __init__(self, name, author, publisher, price, qntdd, categoria, fabricacao):
         self.name = name
         self.author = author
         self.publisher = publisher
         self.price = price
         self.qntdd = qntdd
+        self.categoria = categoria
+        self.fabricacao = fabricacao
         
     def getFloatInputForClass(self, prompt):
         while True:
@@ -22,7 +24,9 @@ class Book:
         print("Autor: ", info[1])
         print("Editora: ", info[2])
         print("Preço: ", info[3])
-        print("Qntdd ", info[4], "\n")
+        print("Qntdd ", info[4])
+        print("Categoria ", info[5])
+        print("Fabricação: ", info[6], "\n")
 
     def insertBook(self, db, info):
         comando = """SELECT * FROM estoque WHERE name = %s AND author = %s AND publisher = %s"""
@@ -34,10 +38,12 @@ class Book:
             print("Author = ", row[2], )
             print("Publisher = ", row[3], )
             print("Price = ", row[4], )
-            print("Qntdd = ", row[5], "\n")
+            print("Qntdd = ", row[5], )
+            print("Categoria = ", row[6], )
+            print("Fabricação = ", row[7], "\n")
 
         if resultado == []:
-            comando = """ INSERT INTO estoque(name, author, publisher, price, quantidade) VALUES (%s,%s,%s,%s,%s)"""
+            comando = """ INSERT INTO estoque(name, author, publisher, price, quantidade, categoria, fabricacao) VALUES (%s,%s,%s,%s,%s, %s, %s)"""
             db.commitDB(comando, info)
             print("Inserção feita com sucesso!!\n")
         else:
@@ -78,7 +84,9 @@ class Book:
                 f"Author: {self.author}\n"
                 f"Publisher: {self.publisher}\n"
                 f"Price: {self.price}\n"
-                f"Qtdd: {self.qntdd}\n")
+                f"Qtdd: {self.qntdd}\n"
+                f"Categoria: {self.categoria}\n"
+                f"Fabricação: {self.fabricacao}\n")
         return
 
     def updatePrice(self, db, id, newPrice):
@@ -106,6 +114,16 @@ class Book:
     def updateQuantity(self, db, id, newQuant):
         comando = "UPDATE estoque SET quantidade = %s WHERE id_book = %s"
         db.commitDB(comando,(newQuant, id))
+        return
+
+    def updateCategoria(self, db, id, newCategoria):
+        comando = "UPDATE estoque SET categoria = %s WHERE id_book = %s"
+        db.commitDB(comando,(newCategoria, id))
+        return
+
+    def updateFabricacao(self, db, id, newFabricacao):
+        comando = "UPDATE estoque SET fabricacao = %s WHERE id_book = %s"
+        db.commitDB(comando,(newFabricacao, id))
         return
 
 
@@ -151,3 +169,20 @@ class Book:
         else:
             return result
         
+    def searchByCategoria(self, db, categoria):
+        comando = "SELECT * from estoque WHERE categoria LIKE %s"
+        resultado = db.readDB(comando, (f"%{categoria}%",))
+        if resultado == []:
+            print("Categoria não encontrado!\n")
+        else:
+            return resultado
+
+    def searchByFabricacao(self, db, fabricacao):
+        comando = "SELECT * from estoque WHERE fabricacao LIKE %s"
+        resultado = db.readDB(comando, (f"%{fabricacao}%",))
+        if resultado == []:
+            print(f"Local: {fabricacao} não encontrado!\n")
+        else:
+            return resultado
+
+    

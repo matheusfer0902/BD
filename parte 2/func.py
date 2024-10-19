@@ -12,7 +12,9 @@ def callShowData(resultado):
             print("Autor: ", row[2])
             print("Editora: ", row[3])
             print("Preço: ", row[4])
-            print("Qntdd: ", row[5], "\n")
+            print("Qntdd: ", row[5])
+            print("Categoria: ", row[6])
+            print("Fabricação: ", row[7], "\n")
 
 def dadosPessoais(db, id):
     os.system('cls')
@@ -101,7 +103,9 @@ def insert(db, bookshelf):
             getStringInput("Digite o nome do autor: "),
             getStringInput("Digite o nome da editora: "),
             getFloatInput("Digite o preço do livro: "),
-            getIntInput("Digite a quantidade de livros: "))
+            getIntInput("Digite a quantidade de livros: "),
+            getStringInput("Digite a categoria do livro: "),
+            getStringInput("Digite o local de fabricação: "))
     bookshelf.printBook(info)
     bookshelf.insertBook(db, info)
 
@@ -246,8 +250,27 @@ def search(db, bookshelf):
             callShowData(data)
 
             input("\nAperte ENTER para continuar...")
+        case 4: # CATEGORIA
+            os.system('cls')
 
-        case 4: #BACK TO MENU
+            searchCategoria = getStringInput("Digite a categoria para pesquisa: ")
+
+            data = bookshelf.searchByCategoria(db, searchCategoria)
+            
+            callShowData(data)
+
+            input("\nAperte ENTER para continuar...")
+        case 5: #FABRICAÇÃO
+            os.system('cls')
+
+            searchFabricacao = getStringInput("Digite o local da fabricação para pesquisa: ")
+
+            data = bookshelf.searchByFabricacao(db, searchFabricacao)
+            
+            callShowData(data)
+
+            input("\nAperte ENTER para continuar...")
+        case 6: #BACK TO MENU
             input("\nAperte ENTER para voltar ao menu...")
         case _:
             print("Opção inválida")
@@ -258,7 +281,9 @@ def searchMenu():
             "1 - Pesquisar por nome\n"
             "2 - Pesquisar por ID\n"
             "3 - Pesquisar por faixa de preço\n"
-            "4 - Voltar\n")
+            "4 - Pesquisar por categoria\n"
+            "5 - Pesquisar por fabricação\n"
+            "6 - Voltar\n")
         return op
 
 def showAll(db):
@@ -315,7 +340,17 @@ def update(db, bookshelf):
             bookshelf.updateQuantity(db, id, newQuant)
             print("quantidade Atualizada.")
             input("\nAperte ENTER para continuar...")
-        case 6: #BACK TO MENU
+        case 6: #UPDATE CATEGORIA
+            newCategoria = getStringInput("Qual a nova categoria? ")
+            bookshelf.updateCategoria(db, id, newCategoria)
+            print("Categoria Atualizada.")
+            input("\nAperte ENTER para continuar...")
+        case 7: #UPDATE FABRICACAO
+            newFabricacao = getStringInput("Qual a nova categoria? ")
+            bookshelf.updateFabricacao(db, id, newFabricacao)
+            print("Fabricação Atualizada.")
+            input("\nAperte ENTER para continuar...")
+        case 8: #BACK TO MENU
             input("\nAperte ENTER para voltar ao menu...")
         case _:
             input("\nOpção inválida, aperte ENTER para continuar...")
@@ -361,7 +396,9 @@ def updateMenu():
             "3 - Editora\n"
             "4 - Preço\n"
             "5 - Quantidade\n"
-            "6 - Voltar\n")
+            "6 - Categoria\n"
+            "7 - Fabricação\n"
+            "8 - Voltar\n")
         return op
 
 def updateSaler(db):

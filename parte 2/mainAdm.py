@@ -49,7 +49,7 @@ def menuAdmSaler():
 
 
 
-bookshelf = bookshelf.Book(0,0,0,0,0) #generic object for calling methods
+bookshelf = bookshelf.Book(0,0,0,0,0,0,0) #generic object for calling methods
 def mainAdm(db, conected):
     while True:
         os.system('cls')

@@ -74,7 +74,7 @@ db.connect()
 
 on = True
 conected = False
-bookshelf = bookshelf.Book(0,0,0,0,0) #generic object for calling methods
+bookshelf = bookshelf.Book(0,0,0,0,0,0,0) #generic object for calling methods
 
 #sla tava dando erro de identação nos switch case ai cloquei isso la
 def test():
