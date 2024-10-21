@@ -145,7 +145,7 @@ class Book:
     
     def searchByName(self, db, name):
         comando = "SELECT * from estoque WHERE name LIKE %s"
-        resultado = db.readDB(comando, (f"%{name}%",))
+        resultado = db.readDB(comando, (f"{name}%",))
         if resultado == []:
             print("Nome não encontrado!\n")
         else:
@@ -171,7 +171,7 @@ class Book:
         
     def searchByCategoria(self, db, categoria):
         comando = "SELECT * from estoque WHERE categoria LIKE %s"
-        resultado = db.readDB(comando, (f"%{categoria}%",))
+        resultado = db.readDB(comando, (f"{categoria}%",))
         if resultado == []:
             print("Categoria não encontrado!\n")
         else:
@@ -179,7 +179,7 @@ class Book:
 
     def searchByFabricacao(self, db, fabricacao):
         comando = "SELECT * from estoque WHERE fabricacao LIKE %s"
-        resultado = db.readDB(comando, (f"%{fabricacao}%",))
+        resultado = db.readDB(comando, (f"{fabricacao}%",))
         if resultado == []:
             print(f"Local: {fabricacao} não encontrado!\n")
         else:

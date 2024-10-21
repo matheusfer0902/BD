@@ -88,7 +88,7 @@ def criarPedido(db, conected):
             query = """INSERT INTO item_pedido (pedido_id, livro_id, quantidade, preco_unitario) VALUES (%s, %s, %s, %s)""" 
             db.commitDB(query,(id_pedido, livro_id, quantidade, preco_unitario[0][0])) #adiciona itens na tabela que já calcula o valor total automático
             updateStatus(db, "confirmado", id_pedido)
-        input("Pedido criado com sucesso! Aperte enter para voltar ao menu")
+        input("Pedido realizado com sucesso! Aperte enter para voltar ao menu")
     else:
         returnQntdd(db, original)
         input("Pedido cancelado. Aperte enter para voltar ao menu")
