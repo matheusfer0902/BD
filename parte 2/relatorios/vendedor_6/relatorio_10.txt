@@ -1,0 +1,3 @@
+	[ID] Nome: [6] junior
+	Valor total em vendas: 36.00
+	Quantidade de pedidos: 1

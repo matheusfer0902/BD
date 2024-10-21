@@ -3,6 +3,7 @@ import users
 import bookshelf
 import os
 from datetime import date
+import datetime
 
 def callShowData(resultado):
     for row in resultado:
@@ -21,6 +22,33 @@ def dadosPessoais(db, id):
     result = users.Usuario.getUserbyID(db, id)
     users.Usuario.showUsers(db, result)
     input("\nAperte ENTER para continuar...")
+
+def gerarRelatoriosMensais(db, id_vendedor):
+    ano_atual = date.today().year
+
+    pasta_relatorios = f"parte 2/relatorios/vendedor_{id_vendedor}"
+    if not os.path.exists(pasta_relatorios):
+            os.makedirs(pasta_relatorios)
+    
+    for mes in range(1, 13):
+        data_inicio = date(ano_atual, mes, 1) #inicio do mês
+        if mes == 12:  #data fim = 01/01/ano_atual+1
+            data_fim = date(ano_atual + 1, 1, 1) - datetime.timedelta(days=1) 
+        else: #data fim = 01/mes+1/ano_atual
+            data_fim = date(ano_atual, mes + 1, 1) - datetime.timedelta(days=1)
+
+        query = "SELECT * FROM relatorio_vendas_vendedor(%s, %s, %s)"
+        result = db.readDB(query, (id_vendedor, data_inicio, data_fim))
+
+        if result:
+            nome_arquivo = os.path.join(pasta_relatorios, f"relatorio_{mes:02d}.txt")
+            with open(nome_arquivo, 'w') as arquivo:
+                arquivo.write(f"\t[ID] Nome: [{result[0][0]}] {result[0][1]}\n"
+                                f"\tValor total em vendas: {result[0][2]}\n"
+                                f"\tQuantidade de pedidos: {result[0][3]}\n")
+        
+    input("Relatórios mensais criados! Aperte ENTER para voltar ao menu")
+
 
 def getBolleanInput(prompt):
         while True:
@@ -155,7 +183,8 @@ def relatorioMenu():
             "1 - Diário\n"
             "2 - Mensal\n"
             "3 - Total\n"
-            "4 - Voltar\n")
+            "4 - Gerar arquivos de relatorios\n"
+            "5 - Voltar\n")
         return op
 
 def relatorioVendas(db, conected):
@@ -179,6 +208,8 @@ def relatorioVendas(db, conected):
             query = "SELECT * FROM relatorio_vendas_vendedor(%s)"
             result = db.readDB(query, (id_vendedor,))
             printRelatorio(result, "total")
+        case 4:
+            gerarRelatoriosMensais(db, id_vendedor)
             
 
 def printRelatorio(result, tipo):
