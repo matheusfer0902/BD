@@ -34,9 +34,10 @@ def mainMenu() :
         op = func.getIntInput("Selecione sua opção\n"
             "1 - Pesquisar livros\n"
             "2 - Listar livros\n"
-            "3 - Login\n"
-            "4 - Cadastre-se\n"
-            "5 - Sair\n")
+            "3 - Realizar pedido\n"
+            "4 - Login\n"
+            "5 - Cadastre-se\n"
+            "6 - Sair\n")
         return op
 
 
@@ -91,7 +92,9 @@ while on:
         case 2: # Listar
             func.showAll(db)
             input("\nAperte ENTER para continuar...")
-        case 3: # Login
+        case 3: #vai solicitar que faça login/cadastro para realizar pedido
+            buy.criarPedido(db, conected)
+        case 4: # Login
             os.system('cls')
             conected = loginUser(())
             if conected:
@@ -102,16 +105,14 @@ while on:
                     on = mainSaler.mainSaler(db, conected)
                 elif conected[4] == 3:
                     on = mainAdm.mainAdm(db, conected)
-        case 4: # Cadastro
+        case 5: # Cadastro
             os.system('cls')
             # Quando cadastrar ele ja fica logado
             login = func.registerClient(db)
             conected = loginUser(login)
             on = mainClient.mainClient(db, conected)
-        case 5:
+        case 6:
             on = False
-        case 6: #usando apenas para teste
-            buy.criarPedido(db, conected)
         case _:
             os.system('cls')
             print("Opção inválida")

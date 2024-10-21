@@ -13,7 +13,7 @@ def menuClient(name):
     while 1:
         op = func.getIntInput(f"Ola! {name}\n"
             "Selecione sua opção\n"
-            "1 - Comprar um livro\n"
+            "1 - Realizar pedido\n"
             "2 - Pesquisar livro\n"
             "3 - Listar livros\n"
             "4 - Meu perfil\n"

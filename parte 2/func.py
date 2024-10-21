@@ -158,16 +158,36 @@ def relatorioMenu():
             "4 - Voltar\n")
         return op
 
-def relatorioVendas(db, id_vendedor):
+def relatorioVendas(db, conected):
+    query = "SELECT * FROM vendedor WHERE id_usuario = %s"
+    result = db.readDB(query, (conected[0],))
+    id_vendedor = result[0][0]
     os.system('cls')
     op = relatorioMenu()
     match op:
         case 1:
-            query = "SELECT * FROM relatorio_vendas_vendedor_unico(%s, %s, %s)"
+            query = "SELECT * FROM relatorio_vendas_vendedor(%s, %s, %s)"
             info = (id_vendedor, date.today().strftime('%Y-%m-%d'), date.today().strftime('%Y-%m-%d'))
             result = db.readDB(query, info)
-            print(info, result)
-            input("enter")
+            printRelatorio(result, "diário")
+        case 2:
+            query = "SELECT * FROM relatorio_vendas_vendedor(%s, %s, %s)"
+            info = (id_vendedor, date.today().strftime('%Y-%m-01'), date.today().strftime('%Y-%m-31'))
+            result = db.readDB(query, info)
+            printRelatorio(result, "mensal")
+        case 3:
+            query = "SELECT * FROM relatorio_vendas_vendedor(%s)"
+            result = db.readDB(query, (id_vendedor,))
+            printRelatorio(result, "total")
+            
+
+def printRelatorio(result, tipo):
+    os.system('cls')
+    print(f"Relatório {tipo} de vendas:\n"
+        f"\t[ID] Nome: [{result[0][0]}] {result[0][1]}\n"
+        f"\tValor total em vendas: {result[0][2]}\n"
+        f"\tQuantidade de pedidos: {result[0][3]}\n")
+    input("Aperte ENTER para voltar ao menu.")
 
 def remove(db, bookshelf):
     os.system('cls')

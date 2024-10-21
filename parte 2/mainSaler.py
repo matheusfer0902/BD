@@ -10,7 +10,7 @@ def menuSaler(name):
     while 1:
         op = func.getIntInput(f"Ola! {name}\n"
             "Selecione sua opção\n"
-            "1 - Realizar novo pedido\n"
+            "1 - Realizar pedido\n"
             "2 - Inserir novo livro\n"
             "3 - Editar dados de livros\n"
             "4 - Pesquisar livro\n"
@@ -78,7 +78,7 @@ def mainSaler(db, conected):
                             buy.MeusPedidos(db, conected[4], conected[0])
                         case 3:
                             #Relatório de vendas
-                            func.relatorioVendas(db, conected[0])
+                            func.relatorioVendas(db, conected)
                         case 4:
                             break
             case 9:
