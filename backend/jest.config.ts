@@ -198,4 +198,4 @@ const config: Config = {
   // watchman: true,
 };
 
-export default config;
+module.exports = config;
